@@ -23,6 +23,14 @@ def pricing():
 def guide():
     return render_template('guide.html')
 
+@app.route('/login/')
+def guide():
+    return render_template('login.html')
+
+@app.route('/register/')
+def guide():
+    return render_template('register.html')
+
 @app.route('/groups/')
 def groups():
     db_con = db.get_db_con()
