@@ -27,6 +27,9 @@ Wir haben uns für ein modernes Dark-Mode-Design entschieden, das optisch zu Twi
 ## Guide
 ![Guide](./guide.png)
 
+## Pricing
+![Pricing](./pricing.png)
+
 ## Profile
 ![Profile](./Profile.png)
 
@@ -35,4 +38,5 @@ Wir haben uns für ein modernes Dark-Mode-Design entschieden, das optisch zu Twi
 
 ## Overlay
 ![Overlay](./Overlay.png)
+
 
