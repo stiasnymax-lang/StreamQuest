@@ -15,6 +15,10 @@ app.teardown_appcontext(db.close_db_con)
 def index():
     return render_template('base.html')
 
+@app.route('/support/')
+def guide():
+    return render_template('support.html')
+
 @app.route('/pricing/')
 def pricing():
     return render_template('pricing.html')
@@ -30,6 +34,10 @@ def guide():
 @app.route('/register/')
 def guide():
     return render_template('register.html')
+
+@app.route('/profile/')
+def guide():
+    return render_template('profile.html')
 
 @app.route('/groups/')
 def groups():
