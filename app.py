@@ -60,11 +60,6 @@ def create_group():
         return redirect(url_for('groups'))
     return render_template('create_group.html')
 
-@app.route('/solo_challenges/<int:user_id>/')
-def solo_challenges(user_id):
-    return render_template('solo_challenges.html', user_id=user_id)
-
-
 
 
 @app.route('/insert/sample/')
