@@ -10,8 +10,10 @@ CREATE TABLE users (
 CREATE TABLE groups (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL
-);
+    password TEXT NOT NULL,
+    FOREIGN KEY (owner_id) REFERENCES users(id),
+    FOREIGN KEY (challenge_id) REFERENCES challenges(id)
+    );
 
 CREATE TABLE group_members (
     user_id INTEGER NOT NULL,
