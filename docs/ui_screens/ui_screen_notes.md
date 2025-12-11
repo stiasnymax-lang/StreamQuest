@@ -1,6 +1,6 @@
 # StreamQuest – UI Screens Documentation
 
-## Designentscheidungen (Kurzfassung)
+## Designentscheidungen 
 
 Wir haben uns für ein modernes Dark-Mode-Design entschieden, das optisch zu Twitch und Streaming-Umgebungen passt. Die violetten Akzente schaffen Wiedererkennungswert und lenken gezielt den Fokus auf interaktive Elemente wie Buttons und aktive Challenges. Durch klare Typografie und großzügige Abstände wirkt die Oberfläche ruhig und ist auch bei schnellen Blicken gut erfassbar. Für die visuelle Ausarbeitung und Darstellung der UI-Screens haben wir **Stitch** genutzt, um konsistente Mockups zu generieren und das Design schrittweise zu verbessern. Unser Fokus lag auf den Kernfunktionen (Gruppen, Challenges, Sessions), weshalb Support und Abonnement-Modelle bewusst minimal gehalten wurden, da diese Bereiche erst beim tatsächlichen Launch der Plattform wirklich relevant und umfangreicher wären. Insgesamt soll das Design professionell wirken, aber gleichzeitig einfach genug bleiben, um in begrenzter Projektzeit vollständig umsetzbar zu sein.  
 **Falls gewünscht, können wir in einer nächsten Ausarbeitung auch detailliert auf jeden einzelnen Screen eingehen – wir waren uns lediglich unsicher, ob dieser Detaillierungsgrad bereits an dieser Stelle erwartet wird.**
@@ -35,3 +35,4 @@ Wir haben uns für ein modernes Dark-Mode-Design entschieden, das optisch zu Twi
 
 ## Overlay
 ![Overlay](./Overlay.png)
+
