@@ -35,6 +35,10 @@ def guide():
 def guide():
     return render_template('register.html')
 
+@app.route('/overlay/<int:group_id>/')
+def guide(group_id):
+    return render_template('overlay.html', group_id=group_id)
+
 @app.route('/profile/')
 def guide():
     return render_template('profile.html')
