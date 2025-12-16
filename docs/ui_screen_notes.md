@@ -7,36 +7,36 @@ Wir haben uns für ein modernes Dark-Mode-Design entschieden, das optisch zu Twi
 
 
 ## Home Screen
-![Home Screen](./Home_Screen.png)
+![Home Screen](docs\assets\images\Home_Screen.png) 
 
 ## Login
-![Login](./log_in.png)
+![Login](docs\assets\images\log_in.png)
 
 ## Registrierung
-![Registration](./Sign_Up.png)
+![Registration](docs\assets\images/Sign_Up.png)
 
 ## Groups Overview
-![Groups](./groups.png)
+![Groups](docs\assets\images\groups.png)
 
 ## Group Detail
-![Group Detail](./group.png)
+![Group Detail](docs\assets\images\group.png)
 
 ## Create Group
-![Create Group](./create_group.png)
+![Create Group](docs\assets\images\create_group.png)
 
 ## Guide
-![Guide](./guide.png)
+![Guide](docs\assets\images\guide.png)
 
 ## Pricing
-![Pricing](./pricing.png)
+![Pricing](docs/assets/images/pricing.png)
 
 ## Profile
-![Profile](./Profile.png)
+![Profile](docs\assets\images\Profile.png)
 
 ## Support
-![Support](./Support.png)
+![Support](docs\assets\images\Support.png)
 
 ## Overlay
-![Overlay](./Overlay.png)
+![Overlay](docs\assets\images\Overlay.png)
 
 

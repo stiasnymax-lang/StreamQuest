@@ -18,15 +18,41 @@ nav_order: 1
 
 ## The problem
 
-[Describe which problem your application tackles and why it is relevant.]
+Twitch-Streamer stehen regelmäßig vor der Herausforderung, ihren Content über lange Streaming-Sessions hinweg spannend und abwechslungsreich zu gestalten — besonders bei **24-Stunden-Streams**, die hohe Planung und Kreativität erfordern.
+
+Viele Streamer verbringen Stunden damit, Ideen für Challenges zu sammeln oder spontane Aktionen während des Streams zu improvisieren.
+
+Dies führt häufig zu:
+
+- Wiederholtem oder eintönigem Content  
+- Geringerer Zuschauerbindung  
+- Stress bei der Vorbereitung  
 
 ## Our solution
 
-[Describe why and how your app solves the stated problem. Don't over-promise: the description should match what your app actually delivers.]
+**StreamQuest** bietet eine automatisierte und interaktive Lösung:  
+Eine **Web-App**, die zufällige **24-Stunden-Challenges** generiert, die Streamer direkt im Livestream verwenden können.
+
+Die App erstellt aus einem umfangreichen Aufgabenpool dynamische Sets aus mehreren Challenge-Kategorien (z. B. *Gaming, Chat, IRL, Fun*), die:
+
+- spontane und kreative Streams ermöglichen  
+- Interaktion mit der Community fördern  
+- Zeit sparen und Planung vereinfachen  
+
+Zusätzlich bietet StreamQuest ein **Streamer-Dashboard** mit:
+
+- Timer  
+- Fortschrittstracking  
+- der Möglichkeit, Challenges live anzuzeigen  
+- optionaler Twitch-Integration zum Teilen
 
 ## Target user
 
-[Scope your target user(s), e.g., with the help of personas.]
+- Twitch-Streamer, die abwechslungsreiche, unterhaltsame **24-Stunden-Streams** gestalten wollen  
+- Kleinere Creator & Community-Streamer, die nach kreativen Ideen suchen, um ihr Publikum zu aktivieren  
+- Streamer-Communities & Moderatoren, die Challenges für ihre Lieblingsstreamer einreichen oder mitverfolgen möchten  
+- *(Zukünftig:)* Plattformübergreifende Creator auf YouTube Live, Kick oder Trovo  
+
 
 ## Customer journey
 

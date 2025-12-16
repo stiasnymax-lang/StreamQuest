@@ -3,26 +3,23 @@ title: Home
 nav_order: 0
 ---
 
-{: .attention }
-> Any text enclosed by `[ ]` are placeholders, including the opening and closing brackets.
->
-> You may delete this `attention` box.
+# StreamQuest
 
-# [StreamQuest]
+Challenges erstellt. Die Plattform kombiniert Kreativität, Community-Interaktion und Gamification, um Livestreams spannender und abwechslungsreicher zu gestalten
 
-[Project description]
+Streamer erhalten mit nur einem Klick eine zufällige Sammlung von Aufgaben, die sie innerhalb von 24 Stunden erfüllen müssen – z. B. Gaming-, Chat-, oder IRL-Aufgaben
 
 ## Team members
 
-### [Jane Dane]
+### Max Stiasny
 
 About
-: Some info about Jane
+: Some info about Max
 
 Matr.-Nr.
-: 1234567
+: 77201477294
 
-### [Joe Doe]
+### Lukas
 
 About
 : Some info about Joe
