@@ -7,36 +7,37 @@ Wir haben uns für ein modernes Dark-Mode-Design entschieden, das optisch zu Twi
 
 
 ## Home Screen
-![Home Screen](/docs/assets/images/Home_Screen.png) 
+![Home Screen](../assets/images/Home_Screen.png) 
 
 ## Login
-![Login](/docs/assets/images/log_in.png)
+![Login](../assets/images/log_in.png)
+
 
 ## Registrierung
-![Registration](/docs/assets/images/Sign_Up.png)
+![Registration](../assets/images/Sign_Up.png)
 
 ## Groups Overview
-![Groups](/docs/assets/images/groups.png)
+![Groups](../assets/images/groups.png)
 
 ## Group Detail
-![Group Detail](/docs/assets/images/group.png)
+![Group Detail](../assets/images/group.png)
 
 ## Create Group
-![Create Group](/docs/assets/images/create_group.png)
+![Create Group](../assets/images/create_group.png)
 
 ## Guide
-![Guide](/docs/assets/images/guide.png)
+![Guide](../assets/images/guide.png)
 
 ## Pricing
-![Pricing](/docs/assets/images/pricing.png)
+![Pricing](../assets/images/pricing.png)
 
 ## Profile
-![Profile](/docs/assets/images/Profile.png)
+![Profile](../assets/images/Profile.png)
 
 ## Support
-![Support](/docs/assets/images/Support.png)
+![Support](../assets/images/Support.png)
 
 ## Overlay
-![Overlay](/docs/assets/images/Overlay.png)
+![Overlay](../assets/images/Overlay.png)
 
 
