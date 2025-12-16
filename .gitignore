@@ -1,0 +1,15 @@
+# Virtuelle Umgebung
+.venv/
+venv/
+
+# Umgebungsvariablen
+.env
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Instance-Ordner (z. B. SQLite, Configs)
+instance/

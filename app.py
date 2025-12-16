@@ -16,7 +16,7 @@ def index():
     return render_template('base.html')
 
 @app.route('/support/')
-def guide():
+def support():
     return render_template('support.html')
 
 @app.route('/pricing/')
@@ -27,20 +27,30 @@ def pricing():
 def guide():
     return render_template('guide.html')
 
-@app.route('/login/')
-def guide():
+@app.route('/login/', methos=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        #Login-Logik
+        return redirect(url_for('index'))
     return render_template('login.html')
 
 @app.route('/register/')
-def guide():
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        #User speichern
+        return redirect(url_for('login'))
     return render_template('register.html')
 
 @app.route('/overlay/<int:group_id>/')
-def guide(group_id):
+def overlay(group_id):
     return render_template('overlay.html', group_id=group_id)
 
 @app.route('/profile/')
-def guide():
+def profile():
     return render_template('profile.html')
 
 @app.route('/groups/')
@@ -56,7 +66,15 @@ def group(group_id):
 @app.route('/create_group/', methods=['GET', 'POST'])
 def create_group():
     if request.method == 'POST':
-        # Handle group creation logic here
+        name = request.form['name']
+
+        db_con = db.get_db_con()
+        db_con.execute(
+            "INSERT INTO groups (name) VALUES (?)",
+            (name,)
+        )
+        db_con.commit()
+
         return redirect(url_for('groups'))
     return render_template('create_group.html')
 
