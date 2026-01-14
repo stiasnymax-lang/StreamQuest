@@ -1,20 +1,32 @@
-<doctype html>
-<html lang="en">
 
+<!DOCTYPE html>
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flask App</title>
-</head>
-
+    <title>{% block title %}Meine WebApp{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
 <body>
-<nav>
-    <h1>To-Do App</h1>
-    <a href="{{ url_for('groups') }}">Groups</a>
-</nav>
-<section class="content">
-    <header>{% block HEADER %}{% endblock %}</header>
-    {% block CONTENT %}{% endblock %}
-</section>
+    <nav>
+        <a href="/">Home</a> | 
+        <a href="/groups">Gruppen</a> | 
+        <a href="/pricing">Pricing</a> | 
+        <a href="/login">Login</a> | 
+        <a href="/guide">Guide</a> | 
+        <a href="/profile">Profil</a> | 
+        <a href="/create_group">Gruppe erstellen</a> | 
+        <a href="/support">Support</a> | 
+    </nav>
+    <hr>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <hr>
+    <footer>
+        <p>&copy; StreamQuest </p>
+    </footer>
 </body>
 </html>

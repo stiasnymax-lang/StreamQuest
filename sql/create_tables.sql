@@ -11,6 +11,8 @@ CREATE TABLE groups (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
+    owner_id INTEGER NOT NULL,
+    challenge_id INTEGER,
     FOREIGN KEY (owner_id) REFERENCES users(id),
     FOREIGN KEY (challenge_id) REFERENCES challenges(id)
     );
