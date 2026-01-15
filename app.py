@@ -1,6 +1,6 @@
 import os
-from flask import Flask, render_template, redirect, url_for, request, abort, flash
-import db
+from flask import Flask, render_template, redirect, session, url_for, request, abort, flash
+import db, forms
 
 app = Flask(__name__)
 
@@ -27,7 +27,7 @@ def challenges():
         "SELECT id, title, difficulty, game_name, time_needed FROM challenges ORDER BY title"
     ).fetchall()
     return render_template('challenges.html', challenges=challenges)
- 
+
 
 @app.route('/challenge/<int:challenge_id>/')
 def challenge(challenge_id):
@@ -46,7 +46,7 @@ def challenge(challenge_id):
         abort(404)
 
     return render_template('challenge.html', challenge=challenge_row)
- 
+
 
 # -------- Static pages --------
 
@@ -65,46 +65,82 @@ def guide():
     return render_template('guide.html')
 
 
-# -------- Auth (placeholder) --------
+# -------- Authentication --------
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        # Dein Form muss name="username" / name="password" haben
-        username = request.form['username']
-        password = request.form['password']
+    db_con = db.get_db_con()
+    form = forms.LoginForm()
 
-        # TODO: hier später DB-Check + session['user_id'] setzen
-        return redirect(url_for('index'))
+    if request.method == 'GET':
+        sql_query = "SELECT id, username FROM users ORDER BY username"
+        users = db_con.execute(sql_query).fetchall()
+        return render_template('login.html', form=form, users=users)
+    else:  # POST
+        if form.validate():
+            username = form.username.data
+            password = form.password.data
 
-    return render_template('login.html')
+            user = db_con.execute(
+                "SELECT id, password FROM users WHERE username = ?",
+                (username,)
+            ).fetchone()
+            if user and password == user['password']:
+                session['user_id'] = user['id']
+                flash('Login successful.', 'success')
+                return redirect(url_for('index'))
+            else: 
+                flash('Invalid username or password.', 'error')
+        else:   
+            flash("Please fill out the form correctly.", 'error')
+    return render_template('login.html', form=form)
 
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        # TODO: user speichern (inkl. email) + passwort hashen
-        return redirect(url_for('login'))
 
-    return render_template('register.html')
+    db_con = db.get_db_con()
+    form = forms.RegisterForm()
+
+    if request.method == 'GET':
+        sql_query = "SELECT * FROM users ORDER BY id"
+        users = db_con.execute(sql_query).fetchall()
+        return render_template('register.html', form=form, users=users)
+    else:  # POST
+        if form.validate():
+            sql_query = "INSERT INTO users (username, password, email) VALUES (?, ?, ?);"
+            username = form.username.data
+            password = form.password.data
+            email = form.email.data
+            db_con.execute(sql_query, (username, password, email))
+            db_con.commit()
+            flash('Registration successful. Please log in.', 'success')
+            print('Registered user:', username, email, password) #debugging
+            return redirect(url_for('login'))
+        else:
+            flash('Error in registration form. Please check the input fields.', 'error')
+            print(form.errors) #debugging
+    return render_template('register.html', form=form)
+
 
 
 # -------- Profile --------
 
 @app.route('/profile/')
 def profile():
-    db_con = db.get_db_con()
 
-    # TODO: später aus session holen statt hart 1
+    if 'user_id' not in session:
+        flash('Please log in to access your profile.')
+        return redirect(url_for('login'))
+
+    db_con = db.get_db_con()
+    form = forms.ProfileForm()
+    form.user_id.data = session['user_id']
+
     user = db_con.execute(
         "SELECT id, username, email, abonoment FROM users WHERE id = ?",
-        (1,)
+        (form.user_id.data,)
     ).fetchone()
-
-    if user is None:
-        abort(404)
 
     return render_template('profile.html', user=user)
 
@@ -122,10 +158,15 @@ def groups():
 
 @app.route('/group/<int:group_id>/')
 def group(group_id):
+        
+    if 'user_id' not in session:
+        flash('Please log in to see the group.')
+        return redirect(url_for('login'))
+    
     db_con = db.get_db_con()
 
     group_row = db_con.execute(
-        "SELECT id, name, owner_id, challenge_id FROM groups WHERE id = ?",
+        "SELECT id, owner_id, name, challenge_id FROM groups WHERE id = ?",
         (group_id,)
     ).fetchone()
     if group_row is None:
@@ -166,26 +207,33 @@ def group(group_id):
         group_members=group_members
     )
 
+# -------- Create Group ---------
 
 @app.route('/create_group/', methods=['GET', 'POST'])
 def create_group():
-    if request.method == 'POST':
-        name = request.form['name']
-        password = request.form.get('password', 'devpass')
 
-        db_con = db.get_db_con()
+    if 'user_id' not in session:
+        flash('Please log in to create a group.')
+        return redirect(url_for('login'))
+    
+    db_con = db.get_db_con()
+    form = forms.CreateGroupForm()
 
-        # TODO: owner_id später aus session holen
-        db_con.execute(
-            "INSERT INTO groups (name, password, owner_id) VALUES (?, ?, ?)",
-            (name, password, 1)
-        )
-        db_con.commit()   
+    form.user_id.data = session.get('user_id') 
 
-        return redirect(url_for('groups'))
-
-    return render_template('create_group.html')
-
+    if request.method == 'GET':
+        return render_template('create_group.html', form=form)
+    
+    else: #request.method == 'POST'
+        if form.validate():
+            sql_query = 'INSERT INTO groups (name, password, owner_id) VALUES (?, ?, ?);'
+            db_con.execute(sql_query, [form.name.data, form.password.data, form.user_id.data])  
+            db_con.commit()
+            flash('Group has been created.', 'success') 
+        else: 
+            flash('Error creating group. Please check the input fields.', 'error') 
+        return redirect(url_for('groups')) # groups fürs debugging --> /group/<int:group_id>/ 
+        
 
 @app.route('/insert/sample/')
 def run_insert_sample():

@@ -1,12 +1,18 @@
 {% extends 'base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Register{% endblock %}
 
 {% block content %}
     <h2>Registrierung</h2>
-    <form>
-        <label>Email: <input type="email"></label><br><br>
-        <label>Passwort: <input type="password"></label><br><br>
+    
+    <form method="post" >
+        {{ form.csrf_token }}
+        {{ form.username.label }} {{ form.username() }}
+        {{ form.email.label }} {{ form.email() }}
+        {{ form.password.label }} {{ form.password() }}
+
+        <output>{{ get_flashed_messages() }}</output>
+
         <button type="submit">Registrieren</button>
     </form>
 {% endblock %}

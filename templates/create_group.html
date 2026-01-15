@@ -3,8 +3,11 @@
 {% block content %}
     <h1>Gruppe erstellen</h1>
 
-    <input type="text" name="name" placeholder="Gruppenname">
-    <input type="password" name="password" placeholder="Passwort">
-    <input type="text" name="description" placeholder="Beschreibung">
-    <button type="submit">Erstellen</button>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.name.label }} {{ form.name() }}
+        {{ form.password.label }} {{ form.password() }}
+        <button type="submit">Create Group</button>
+    </form>
+
 {% endblock %}

@@ -16,9 +16,9 @@ INSERT INTO groups (name, password, owner_id, challenge_id) VALUES
 ('gamers', 'gamerpass', 1, 1),
 ('developers', 'devpass', 2, 2),
 ('designers', 'designpass', 3, 3);
-INSERT INTO group_members (user_id, group_id) VALUES
-(1, 1),
-(2, 1),
-(2, 2),
-(3, 3);
+INSERT INTO group_members (owner_id,user_id, group_id) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(2, 2, 2),
+(3, 3, 3);
 COMMIT;
