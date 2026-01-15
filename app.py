@@ -17,25 +17,25 @@ app.teardown_appcontext(db.close_db_con)
 @app.route('/')
 def index():
     return render_template('index.html') 
-
+ 
 @app.route('/challenges/')
 def challenges():
     db_con = db.get_db_con()
-    challanges = db_con.execute("SELECT id, name FROM challanges ORDER BY name").fetchall()
-    return render_template('challanges.html', challanges=challanges)
-@app.route('/challenge/<int:challange_id>/')
+    challenges = db_con.execute("SELECT id, name FROM challenges ORDER BY name").fetchall()
+    return render_template('challenges.html', challenges=challenges)
 
-def challenge(challange_id):
+@app.route('/challenge/<int:challenge_id>/')
+def challenge(challenge_id):
     db_con = db.get_db_con()
-
-    challange_row = db_con.execute(
-        "SELECT id, name, description FROM challanges WHERE id = ?",
-        (challange_id,)
+ 
+    challenge_row = db_con.execute(
+        "SELECT id, name, description FROM challenges WHERE id = challenge_id",
+        (challenge_id,)
     ).fetchone()
-    if challange_row is None:
+    if challenge_row is None:
         abort(404)
 
-    return render_template('challenge.html', challange=challange_row)
+    return render_template('challenge.html', challenge=challenge_row)
 
 @app.route('/support/')
 def support():
@@ -52,13 +52,13 @@ def guide():
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        username = request.form['username'] 
         password = request.form['password']
         return redirect(url_for('index'))
     return render_template('login.html')
 
 @app.route('/register/', methods=['GET', 'POST'])
-def register():
+def register(): 
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -80,9 +80,9 @@ def groups():
 @app.route('/group/<int:group_id>/')
 def group(group_id):
     db_con = db.get_db_con()
-
+    
     group_row = db_con.execute(
-        "SELECT id, name FROM groups WHERE id = ?",
+        "SELECT id, name FROM groups WHERE id = group_id",
         (group_id,)
     ).fetchone()
     if group_row is None:
@@ -107,7 +107,7 @@ def create_group():
         name = request.form['name']
 
         db_con = db.get_db_con()
-        
+
         db_con.execute(
             "INSERT INTO groups (name, password, owner_id) VALUES (?, ?, ?)",
             (name, "devpass", 1)

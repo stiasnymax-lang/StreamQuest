@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block TITLE %}Challenges{% endblock %}
+
+{% block content %}
+<h1>Alle Challenges</h1>
+<ul>
+    {% for challenge in challenges %}
+    <li>
+        <label for="{{ challenge.id }}">
+            <a href="{{ url_for('challenge', challenge_id=challenge.id) }}">{{ challenge.name }}</a>
+        </label>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
