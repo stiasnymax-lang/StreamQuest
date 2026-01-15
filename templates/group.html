@@ -1,14 +1,34 @@
 {% extends "base.html" %}
 
-{% block content %}
-  <h1>Alle User dieser Gruppe</h1>
+{% block title %}Group: {{ group.name }}{% endblock %}
 
-  <ul>
-    {% for user in group_members %}
-      <li><a href="{{ url_for('user', user_id=user.id) }}">{{ user.username }}</a></li>
+{% block content %}
+    <h1>Group: {{ group.name }}</h1>
+    
+    <!-- Gruppen-Details -->
+    <h2>Group Details</h2>
+    <p><strong>Owner:</strong> {{ owner.username }}</p>
+    
+    {% if challenge %}
+      {% for challenge in group.challenges %}
+        <h3>Challenge</h3>
+        <p><strong>Title:</strong> {{ challenge.title }}</p>
+        <p><strong>Description:</strong> {{ challenge.description }}</p>
+        <p><strong>Difficulty:</strong> {{ challenge.difficulty }}</p>
+        <p><strong>Game:</strong> {{ challenge.game_name }}</p>
+        <p><strong>Time Needed:</strong> {{ challenge.time_needed }} minutes</p>
+      {% endfor %}
     {% else %}
-      <li>Keine Mitglieder in dieser Gruppe.</li>
-    {% endfor %}
-  </ul>
-  <button type="submit">Gruppe löschen</button>
+        <p>No challenge assigned to this group.</p>
+    {% endif %}
+    
+    <!-- Mitglieder-Liste -->
+    <h2>Members</h2>
+    <ul>
+        {% for user in group_members %}
+            <li>{{ user.username }} (Abonoment: {{ user.abonoment }})</li>
+        {% else %}
+            <li>No members in this group.</li>
+        {% endfor %}
+    </ul>
 {% endblock %}

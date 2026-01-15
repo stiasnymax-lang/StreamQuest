@@ -13,3 +13,6 @@ __pycache__/
 
 # Instance-Ordner (z. B. SQLite, Configs)
 instance/
+
+# Notizen local
+notes.txt

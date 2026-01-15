@@ -115,11 +115,9 @@ def register():
             db_con.execute(sql_query, (username, password, email))
             db_con.commit()
             flash('Registration successful. Please log in.', 'success')
-            print('Registered user:', username, email, password) #debugging
             return redirect(url_for('login'))
         else:
             flash('Error in registration form. Please check the input fields.', 'error')
-            print(form.errors) #debugging
     return render_template('register.html', form=form)
 
 
@@ -155,28 +153,84 @@ def groups():
     ).fetchall()
     return render_template('groups.html', groups=groups)
 
+@app.route('/join/<int:group_id>/')
+def join_group(group_id):
+    if "user_id" not in session:
+        flash('Please log in to join a group.')
+        return redirect(url_for('login'))
+    db_con = db.get_db_con()
+    form = forms.JoinGroupForm()
+    user_id = session['user_id']
+
+    # Hole Gruppeninfo (inkl. password und owner_id)
+    group_row = db_con.execute(
+        "SELECT id, name, password, owner_id FROM groups WHERE id = ?",
+        (group_id,)
+    ).fetchone()
+    if group_row is None:
+        abort(404)
+    
+    # Prüfe, ob User bereits Mitglied ist
+    existing_member = db_con.execute(
+        "SELECT 1 FROM group_members WHERE user_id = ? AND group_id = ?",
+        (user_id, group_id)
+    ).fetchone()
+    if existing_member:
+        flash('You are already a member of this group.', 'info')
+        return redirect(url_for('group', group_id=group_id))
+    
+    # Füge User als Mitglied hinzu und Prüfe Passwort
+    if request.method == 'GET':
+        return render_template('join_group.html', form=form, group=group_row)
+    else:  # POST
+        if form.validate():
+            if form.password.data == group_row['password']:
+                # Füge User zur Gruppe hinzu
+                db_con.execute(
+                    "INSERT INTO group_members (owner_id, user_id, group_id) VALUES (?, ?, ?)",
+                    (group_row['owner_id'], user_id, group_id)
+                )
+                db_con.commit()
+                flash('Successfully joined the group!', 'success')
+                return redirect(url_for('group', group_id=group_id))
+            else:
+                flash('Invalid group password.', 'error')
+        else:
+            flash('Please enter the group password.', 'error')
+        return render_template('join_group.html', form=form, group=group_row)
 
 @app.route('/group/<int:group_id>/')
 def group(group_id):
-        
     if 'user_id' not in session:
         flash('Please log in to see the group.')
         return redirect(url_for('login'))
     
     db_con = db.get_db_con()
-
+    user_id = session['user_id']
+    
+    # Prüfe, ob User Mitglied oder Owner ist
+    is_member = db_con.execute(
+        "SELECT 1 FROM group_members WHERE user_id = ? AND group_id = ?",
+        (user_id, group_id)
+    ).fetchone()
     group_row = db_con.execute(
         "SELECT id, owner_id, name, challenge_id FROM groups WHERE id = ?",
         (group_id,)
     ).fetchone()
     if group_row is None:
         abort(404)
-
+    
+    is_owner = group_row['owner_id'] == user_id
+    if not is_member and not is_owner:
+        flash('You must join the group first to view its details.')
+        return redirect(url_for('join_group', group_id=group_id))
+    
+    # Restlicher Code für Anzeige (Owner, Challenge, Members)
     owner = db_con.execute(
         "SELECT id, username, abonoment FROM users WHERE id = ?",
         (group_row["owner_id"],)
     ).fetchone()
-
+    
     challenge = None
     if group_row["challenge_id"] is not None:
         challenge = db_con.execute(
@@ -187,7 +241,7 @@ def group(group_id):
             """,
             (group_row["challenge_id"],)
         ).fetchone()
-
+    
     group_members = db_con.execute(
         """
         SELECT u.id, u.username, u.abonoment
@@ -198,7 +252,7 @@ def group(group_id):
         """,
         (group_id,)
     ).fetchall()
-
+    
     return render_template(
         'group.html',
         group=group_row,
@@ -232,10 +286,10 @@ def create_group():
             flash('Group has been created.', 'success') 
         else: 
             flash('Error creating group. Please check the input fields.', 'error') 
-        return redirect(url_for('groups')) # groups fürs debugging --> /group/<int:group_id>/ 
+        return redirect(url_for('groups')) # groups fürs debugging --> /group/<int:group_id>/ direkt zur erstellten
         
 
 @app.route('/insert/sample/')
 def run_insert_sample():
-    db.insert_sample()
+    db.insert_sample() 
     return "Sample data inserted."

@@ -21,3 +21,19 @@ class LoginForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4, max=20)])
     password = PasswordField(validators=[InputRequired(), Length(min=3, max=20)])
     submit = SubmitField('Login')
+
+class JoinGroupForm(FlaskForm):
+    password = PasswordField(validators=[InputRequired(), Length(min=3)])
+    submit = SubmitField('Join Group')
+
+class GroupForm(FlaskForm):
+    group_id = HiddenField()
+
+class ChallengeForm(FlaskForm):
+    title = StringField(validators=[InputRequired(), Length(min=2)])
+    description = StringField(validators=[InputRequired(), Length(min=5)])
+    difficulty = StringField(validators=[InputRequired()])
+    game_name = StringField(validators=[InputRequired(), Length(min=2)])
+    time_needed = StringField(validators=[InputRequired()])
+    submit = SubmitField('Create Challenge')
+    
