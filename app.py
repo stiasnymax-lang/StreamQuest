@@ -16,7 +16,26 @@ app.teardown_appcontext(db.close_db_con)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html') 
+
+@app.route('/challenges/')
+def challenges():
+    db_con = db.get_db_con()
+    challanges = db_con.execute("SELECT id, name FROM challanges ORDER BY name").fetchall()
+    return render_template('challanges.html', challanges=challanges)
+@app.route('/challenge/<int:challange_id>/')
+
+def challenge(challange_id):
+    db_con = db.get_db_con()
+
+    challange_row = db_con.execute(
+        "SELECT id, name, description FROM challanges WHERE id = ?",
+        (challange_id,)
+    ).fetchone()
+    if challange_row is None:
+        abort(404)
+
+    return render_template('challenge.html', challange=challange_row)
 
 @app.route('/support/')
 def support():
@@ -88,8 +107,7 @@ def create_group():
         name = request.form['name']
 
         db_con = db.get_db_con()
-        # Achtung: muss zu deinem Schema passen!
-        # Wenn groups owner_id/password NOT NULL hat, musst du die mit angeben.
+        
         db_con.execute(
             "INSERT INTO groups (name, password, owner_id) VALUES (?, ?, ?)",
             (name, "devpass", 1)
