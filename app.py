@@ -39,7 +39,7 @@ def challenge(challenge_id):
         FROM challenges
         WHERE id = ?
         """,
-        (challenge_id,)
+        (challenge_id,) 
     ).fetchone() 
 
     if challenge_row is None:

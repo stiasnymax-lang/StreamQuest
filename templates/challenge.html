@@ -2,8 +2,12 @@
 
 {% block content %}
   <h1>Challenge Informationen</h1>
-
+  
+<p>{{ challenge.description }}</p>
   <ul>
-
+    <li><strong>Titel:</strong> {{ challenge.title }}</li>
+    <li><strong>Schwierigkeit:</strong> {{ challenge.difficulty }}</li>
+    <li><strong>Spiel:</strong> {{ challenge.game_name }}</li>
+    <li><strong>Zeit:</strong> {{ challenge.time_needed }} min</li>
   </ul>
 {% endblock %}
