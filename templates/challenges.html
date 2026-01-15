@@ -8,7 +8,7 @@
     {% for challenge in challenges %}
     <li>
         <label for="{{ challenge.id }}">
-            <a href="{{ url_for('challenge', challenge_id=challenge.id) }}">{{ challenge.name }}</a>
+            <a href="{{ url_for('challenge', challenge_id=challenge.id) }}">{{ challenge.title }}</a>
         </label>
     </li>
     {% endfor %}
