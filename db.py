@@ -34,5 +34,6 @@ def init_db():
 
 def insert_sample():
     db_con = get_db_con()
+    print("Inserting sample data...") #debugging line
     with current_app.open_resource('sql/insert_sample.sql') as f:
         db_con.executescript(f.read().decode('utf8'))

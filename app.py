@@ -15,6 +15,14 @@ app.teardown_appcontext(db.close_db_con)
 
 @app.route('/')
 def index():
+    if 'user_id' in session:
+        user_id = session['user_id']
+    else:
+        user_id = None
+
+    db_con = db.get_db_con()
+    form = forms.ProfileForm()
+    form.user_id.data = session['user_id']
     return render_template('index.html')
 
 
