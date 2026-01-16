@@ -25,6 +25,21 @@ def index():
     form.user_id.data = session['user_id']
     return render_template('index.html')
 
+@app.route('/overlay/<int:group_id>/')
+def overlay(group_id):
+    db_con = db.get_db_con()
+    group_row = db_con.execute(
+        "SELECT id, name FROM groups WHERE id = ?",
+        (group_id,)
+    ).fetchone()
+    if group_row is None:
+        abort(404)
+
+    challenges = db_con.execute(
+        "SELECT id, title FROM challenges ORDER BY title"
+    ).fetchall()
+
+    return render_template('overlay.html', group_name=group_row['name'], challenges=challenges)
 
 # -------- Challenges --------
 

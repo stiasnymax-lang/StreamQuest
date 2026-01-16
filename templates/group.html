@@ -17,6 +17,13 @@
         <p><strong>Difficulty:</strong> {{ challenge.difficulty }}</p>
         <p><strong>Game:</strong> {{ challenge.game_name }}</p>
         <p><strong>Time Needed:</strong> {{ challenge.time_needed }} minutes</p>
+
+        <fieldset>
+            <legend>Challenge Overlay Link</legend>
+            <p>Use the following link to access the challenge overlay:</p>
+            <input type="text" readonly value="{{ url_for('overlay', group_id=group.id, _external=True) }}" style="width:100%;">
+        </fieldset>
+        
       {% endfor %}
     {% else %}
         <p>No challenge assigned to this group.</p>
