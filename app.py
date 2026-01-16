@@ -150,9 +150,7 @@ def register():
 @app.route('/profile/')
 def profile():
 
-    if 'user_id' not in session:
-        flash('Please log in to access your profile.')
-        return redirect(url_for('login'))
+    logincheck()
 
     db_con = db.get_db_con()
     form = forms.ProfileForm()
@@ -178,9 +176,7 @@ def groups():
 
 @app.route('/join/<int:group_id>/')
 def join_group(group_id):
-    if "user_id" not in session:
-        flash('Please log in to join a group.')
-        return redirect(url_for('login'))
+    logincheck()
     db_con = db.get_db_con()
     form = forms.JoinGroupForm()
     user_id = session['user_id']
@@ -224,9 +220,7 @@ def join_group(group_id):
 
 @app.route('/group/<int:group_id>/')
 def group(group_id):
-    if 'user_id' not in session:
-        flash('Please log in to see the group.')
-        return redirect(url_for('login'))
+    logincheck()
     
     db_con = db.get_db_con()
     user_id = session['user_id']
@@ -289,9 +283,7 @@ def group(group_id):
 @app.route('/create_group/', methods=['GET', 'POST'])
 def create_group():
 
-    if 'user_id' not in session:
-        flash('Please log in to create a group.')
-        return redirect(url_for('login'))
+    logincheck()
     
     db_con = db.get_db_con()
     form = forms.CreateGroupForm()
@@ -316,3 +308,8 @@ def create_group():
 def run_insert_sample():
     db.insert_sample() 
     return "Sample data inserted."
+
+def logincheck():
+    if 'user_id' not in session:
+        flash('Please log in to see the group.')
+        return redirect(url_for('login'))
