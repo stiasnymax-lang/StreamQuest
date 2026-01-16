@@ -4,10 +4,14 @@
   <h1>Challenge Informationen</h1>
   
 <p>{{ challenge.description }}</p>
-  <ul>
-    <li><strong>Titel:</strong> {{ challenge.title }}</li>
-    <li><strong>Schwierigkeit:</strong> {{ challenge.difficulty }}</li>
-    <li><strong>Spiel:</strong> {{ challenge.game_name }}</li>
-    <li><strong>Zeit:</strong> {{ challenge.time_needed }} min</li>
-  </ul>
+
+<li class="challenge-box">
+    <a href="{{ url_for('challenge', challenge_id=challenge.id) }}">
+        <p><strong>Titel:</strong> {{ challenge.title }}</p>
+        <p><strong>Schwierigkeit:</strong> {{ challenge.difficulty }}</p>
+        <p><strong>Spiel:</strong> {{ challenge.game_name }}</p>
+        <p><strong>Zeit:</strong> {{ challenge.time_needed }} min</p>
+    </a>
+</li>
+
 {% endblock %}

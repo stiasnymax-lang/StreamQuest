@@ -33,7 +33,7 @@ def overlay(group_id):
         (group_id,)
     ).fetchone()
     if group_row is None:
-        abort(404)
+        abort(404) 
 
     challenges = db_con.execute(
         "SELECT id, title FROM challenges ORDER BY title"
