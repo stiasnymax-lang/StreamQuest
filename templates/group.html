@@ -8,26 +8,7 @@
     <!-- Gruppen-Details -->
     <h2>Group Details</h2>
     <p><strong>Owner:</strong> {{ owner.username }}</p>
-    
-    {% if challenge %}
-      {% for challenge in group.challenges %}
-        <h3>Challenge</h3>
-        <p><strong>Title:</strong> {{ challenge.title }}</p>
-        <p><strong>Description:</strong> {{ challenge.description }}</p>
-        <p><strong>Difficulty:</strong> {{ challenge.difficulty }}</p>
-        <p><strong>Game:</strong> {{ challenge.game_name }}</p>
-        <p><strong>Time Needed:</strong> {{ challenge.time_needed }} minutes</p>
 
-        <fieldset>
-            <legend>Challenge Overlay Link</legend>
-            <p>Use the following link to access the challenge overlay:</p>
-            <input type="text" readonly value="{{ url_for('overlay', group_id=group.id, _external=True) }}" style="width:100%;">
-        </fieldset>
-        
-      {% endfor %}
-    {% else %}
-        <p>No challenge assigned to this group.</p>
-    {% endif %}
     
     <!-- Mitglieder-Liste -->
     <h2>Members</h2>
@@ -38,4 +19,21 @@
             <li>No members in this group.</li>
         {% endfor %}
     </ul>
+        <h2>Assigned Challenges: </h2>
+    {% if challenge %}
+      {% for challenge in group.challenges %}
+<li>
+    <strong>{{ challenge.title }}</strong>
+</li>
+
+    <fieldset>
+        <legend>Challenge Overlay Link</legend>
+        <p>Use the following link to access the challenge overlay:</p>
+        <input type="text" readonly value="{{ url_for('overlay', group_id=group.id, _external=True) }}" style="width:100%;">
+    </fieldset>
+        
+      {% endfor %}
+    {% else %}
+        <p>No challenge assigned to this group.</p>
+    {% endif %}
 {% endblock %}
