@@ -6,7 +6,10 @@
     <h2>Profile</h2>
     <form>
         <p>Willkommen bei StreamQuest!</p>
-        <p>User ID: {{ user_id }}</p>
+        <p>User ID: {{ user.id }}</p>
+        <p>Username: {{ user.username }}</p>
+        <p>Email: {{ user.email }}</p>
+        <p>Abonnement: {{ user.abonoment }}</p>
         <button type="button" class="btn" onclick="location.href='{{ url_for('index') }}'">Abmelden</button>
         <button type="button" class="btn" onclick="location.href='{{ url_for('index') }}'">Account löschen</button>
     </form>

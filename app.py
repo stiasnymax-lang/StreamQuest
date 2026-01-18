@@ -21,6 +21,8 @@ def index():
 
 @app.route('/overlay/<int:group_id>/')
 def overlay(group_id):
+    logincheck()
+
     db_con = db.get_db_con()
     group_row = db_con.execute(
         "SELECT id, name FROM groups WHERE id = ?",
@@ -143,16 +145,14 @@ def register():
 
 @app.route('/profile/')
 def profile():
-
     logincheck()
 
     db_con = db.get_db_con()
-    form = forms.ProfileForm()
-    form.user_id.data = session['user_id']
+    user_id = session['user_id']
 
     user = db_con.execute(
         "SELECT id, username, email, abonoment FROM users WHERE id = ?",
-        (form.user_id.data,)
+        (user_id,)
     ).fetchone()
 
     return render_template('profile.html', user=user)
@@ -305,5 +305,5 @@ def run_insert_sample():
 
 def logincheck():
     if 'user_id' not in session:
-        flash('Please log in to see the group.')
+        flash('Please log in to see the content.')
         return redirect(url_for('login'))
