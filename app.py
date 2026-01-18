@@ -224,6 +224,7 @@ def group(group_id):
         "SELECT 1 FROM group_members WHERE user_id = ? AND group_id = ?",
         (user_id, group_id)
     ).fetchone()
+
     group_row = db_con.execute(
         "SELECT id, owner_id, name, challenge_id FROM groups WHERE id = ?",
         (group_id,)
@@ -255,7 +256,7 @@ def group(group_id):
     
     group_members = db_con.execute(
         """
-        SELECT u.id, u.username, u.abonoment
+        SELECT u.id, u.username
         FROM users u
         JOIN group_members gm ON gm.user_id = u.id
         WHERE gm.group_id = ?

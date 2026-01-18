@@ -22,9 +22,7 @@ CREATE TABLE groups (
     name TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     owner_id INTEGER,
-    challenge_id INTEGER,
-    FOREIGN KEY (owner_id) REFERENCES users(id),
-    FOREIGN KEY (challenge_id) REFERENCES challenges(id)
+    FOREIGN KEY (owner_id) REFERENCES users(id)
 );
 
 CREATE TABLE group_members (
@@ -36,5 +34,15 @@ CREATE TABLE group_members (
     FOREIGN KEY (owner_id) REFERENCES users(id),
     PRIMARY KEY (user_id, group_id)
 );
-
+CREATE TABLE group_challenges (
+    group_id INTEGER NOT NULL,
+    challenge_id INTEGER NOT NULL,
+    status TEXT NOT NULL DEFAULT 'queued', -- queued | active | done
+    assigned_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    started_at DATETIME,
+    finished_at DATETIME,
+    FOREIGN KEY (group_id) REFERENCES groups(id),
+    FOREIGN KEY (challenge_id) REFERENCES challenges(id),
+    PRIMARY KEY (group_id, challenge_id)
+);
 COMMIT;

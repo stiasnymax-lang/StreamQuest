@@ -28,6 +28,7 @@ class JoinGroupForm(FlaskForm):
 
 class GroupForm(FlaskForm):
     group_id = HiddenField()
+    submit = SubmitField('Start Challenge')
 
 class ChallengeForm(FlaskForm):
     title = StringField(validators=[InputRequired(), Length(min=2)])
@@ -35,5 +36,4 @@ class ChallengeForm(FlaskForm):
     difficulty = StringField(validators=[InputRequired()])
     game_name = StringField(validators=[InputRequired(), Length(min=2)])
     time_needed = StringField(validators=[InputRequired()])
-    submit = SubmitField('Create Challenge')
-    
+    submit = SubmitField('Create Challenge') #Sollen User Erstellen koennen?

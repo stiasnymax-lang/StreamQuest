@@ -4,15 +4,28 @@
     <meta charset="UTF-8">
     <title>{% block title %}Overlay {{ group_name }} {% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='overlay.css') }}">
-    </head>
+</head>
+
 <body>
-<ul>
-    {% for challenge in challenges %}
-<li>
-    <strong>{{ challenge.title }}</strong>
-</li>
-    {% endfor %}
-</ul>
+    {% if active_challenge %}
+        <h1>Aktive Challenge</h1>
+        <p><strong>{{ active_challenge.title }}</strong></p>
+        <p>{{ active_challenge.description }}</p>
+    {% else %}
+        <p>Gerade keine aktive Challenge</p>
+    {% endif %}
+
+    <h2>Restliche Challenges</h2>
+    {% if inactive_challenges %}
+
+        <ul>
+            {% for ch in inactive_challenges %}
+            <li>{{ ch.title }} ({{ ch.status }})</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    </ul>
     <footer>
         <p>&copy; StreamQuest </p>
     </footer>
