@@ -5,7 +5,7 @@
 {% block content %}
     <h1>Group: {{ group.name }}</h1>
     <p><strong>Owner:</strong> {{ owner.username }}</p>
- 
+
     <!-- Mitglieder-Liste -->
     <h2>Members</h2>
     <ul>
@@ -16,20 +16,18 @@
         {% endfor %}
     </ul>
         <h2>Assigned Challenges: </h2>
-    {% if challenge %}
-      {% for challenge in group.challenges %}
-<li>
-    <strong>{{ challenge.title }}</strong>
-</li>
-
+    <h2>Assigned Challenges</h2>
+    <ul>
+        {% for challenge in group.challenges %}
+        <li><strong>{{ challenge.title }}</strong></li>
+        {% else %}
+            <li>No challenge assigned to this group.</li>
+        {% endfor %}
+    </ul>
     <fieldset>
         <legend>Challenge Overlay Link</legend>
         <p>Use the following link to access the challenge overlay:</p>
         <input type="text" readonly value="{{ url_for('overlay', group_id=group.id, _external=True) }}" style="width:100%;">
     </fieldset>
-        
-      {% endfor %}
-    {% else %}
-        <p>No challenge assigned to this group.</p>
-    {% endif %}
+
 {% endblock %}
