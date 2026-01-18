@@ -7,11 +7,12 @@
     
     <form method="post" >
         {{ form.csrf_token }}
-        {{ form.username.label }} {{ form.username() }}
-        {{ form.email.label }} {{ form.email() }}
-        {{ form.password.label }} {{ form.password() }}
-
-        <output>{{ get_flashed_messages() }}</output>
+        {{ form.username.label }} 
+        {{ form.username() }}
+        {{ form.email.label }} 
+        {{ form.email() }}
+        {{ form.password.label }} 
+        {{ form.password() }}
 
         <button type="submit">Registrieren</button>
     </form>

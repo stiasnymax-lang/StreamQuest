@@ -35,7 +35,6 @@ INSERT INTO group_members (owner_id, user_id, group_id) VALUES
 (3, 3, 3);
 
 -- Group Challenges (Zuordnung + Status)
--- Beispiel: pro Gruppe eine aktive Challenge
 INSERT INTO group_challenges (group_id, challenge_id, status, started_at) VALUES
 (1, 1, 'active', CURRENT_TIMESTAMP),
 (1, 2, 'queued', CURRENT_TIMESTAMP),

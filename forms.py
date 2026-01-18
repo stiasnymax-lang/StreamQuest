@@ -29,6 +29,12 @@ class JoinGroupForm(FlaskForm):
 class GroupForm(FlaskForm):
     group_id = HiddenField()
     submit = SubmitField('Start Challenge')
+    submit = SubmitField('Add Challenge')
+    submit = SubmitField('Leave Group') #fehlt
+    submit = SubmitField('Delete Group') #fehlt
+    submit = SubmitField('Remove Member') #fehlt
+    submit = SubmitField('Search') #fehlt
+
 
 class ChallengeForm(FlaskForm):
     title = StringField(validators=[InputRequired(), Length(min=2)])

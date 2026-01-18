@@ -15,14 +15,47 @@
             <li>No members in this group.</li>
         {% endfor %}
     </ul>
-        <h2>Assigned Challenges</h2>
+
+    <!-- Challenge-Start-Button -->
+    <form method="POST">
+        <button type="submit">Start Challenge</button>
+    </form>
+    <!-- Challenge-Add-Button -->
+    <form method="POST">
+        <button type="submit">Add Challenge</button>
+    </form>
+
+    <!-- Challenge-Suche -->
+    <form method="get">
+        <input type="search" name="q" placeholder="Search challenges..." value="{{ q }}">
+    </form>
+
     <ul>
-        {% for challenge in group.challenges %}
-        <li><strong>{{ challenge.title }}</strong></li>
+        {% for ch in challenges %}
+            <li>{{ ch.title }} ({{ ch.status }})</li>
         {% else %}
-            <li>No challenge assigned to this group.</li>
+            <li>No challenges found.</li>
         {% endfor %}
     </ul>
+
+    {% if active_challenge %}
+        <h1>Aktive Challenge</h1>
+        <p><strong>{{ active_challenge.title }}</strong></p>
+        <p>{{ active_challenge.description }}</p>
+    {% else %}
+        <p>Gerade keine aktive Challenge</p>
+    {% endif %}
+
+    <h2>Restliche Challenges</h2>
+    {% if inactive_challenges %}
+        <ul>
+            {% for ch in inactive_challenges %}
+            <li>{{ ch.title }} ({{ ch.status }})</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Overlay-Link -->
     <fieldset>
         <legend>Challenge Overlay Link</legend>
         <p>Use the following link to access the challenge overlay:</p>

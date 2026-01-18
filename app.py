@@ -31,11 +31,29 @@ def overlay(group_id):
     if group_row is None:
         abort(404) 
 
-    challenges = db_con.execute(
-        "SELECT id, title FROM challenges ORDER BY title"
-    ).fetchall()
+    active_challenge = db_con.execute("""
+        SELECT c.*, gc.status
+        FROM group_challenges gc
+        JOIN challenges c ON c.id = gc.challenge_id
+        WHERE gc.group_id = ? AND gc.status = 'active'
+        ORDER BY gc.started_at DESC, gc.assigned_at DESC
+        LIMIT 1
+    """, (group_id,)).fetchone()
 
-    return render_template('overlay.html', group_name=group_row['name'], challenges=challenges)
+    inactive_challenges = db_con.execute("""
+        SELECT c.*, gc.status
+        FROM group_challenges gc
+        JOIN challenges c ON c.id = gc.challenge_id
+        WHERE gc.group_id = ? AND gc.status != 'active'
+        ORDER BY gc.assigned_at DESC
+    """, (group_id,)).fetchall()
+
+    return render_template(
+        'overlay.html',
+        group_name=group_row['name'],
+        active_challenge=active_challenge,
+        inactive_challenges=inactive_challenges
+        )
 
 # -------- Challenges --------
 
@@ -226,51 +244,62 @@ def group(group_id):
     ).fetchone()
 
     group_row = db_con.execute(
-        "SELECT id, owner_id, name, challenge_id FROM groups WHERE id = ?",
+        "SELECT id, owner_id, name FROM groups WHERE id = ?",
         (group_id,)
     ).fetchone()
     if group_row is None:
         abort(404)
     
-    is_owner = group_row['owner_id'] == user_id
-    if not is_member and not is_owner:
-        flash('You must join the group first to view its details.')
-        return redirect(url_for('join_group', group_id=group_id))
-    
-    # Restlicher Code für Anzeige (Owner, Challenge, Members)
     owner = db_con.execute(
-        "SELECT id, username, abonoment FROM users WHERE id = ?",
+        "SELECT id, username FROM users WHERE id = ?",
         (group_row["owner_id"],)
     ).fetchone()
-    
-    challenge = None
-    if group_row["challenge_id"] is not None:
-        challenge = db_con.execute(
-            """
-            SELECT id, title, description, difficulty, game_name, time_needed
-            FROM challenges
-            WHERE id = ?
-            """,
-            (group_row["challenge_id"],)
-        ).fetchone()
-    
-    group_members = db_con.execute(
-        """
-        SELECT u.id, u.username
-        FROM users u
-        JOIN group_members gm ON gm.user_id = u.id
-        WHERE gm.group_id = ?
-        ORDER BY u.username
-        """,
-        (group_id,)
-    ).fetchall()
-    
+
+    group_members = db_con.execute("""
+        SELECT u.id, u.username, owner_id
+        FROM group_members gm 
+        JOIN users u ON u.id = gm.user_id
+        WHERE u.id != owner_id AND gm.group_id = ?
+    """, (group_id,)).fetchall()
+
+    active_challenge = db_con.execute("""
+        SELECT c.*, gc.status
+        FROM group_challenges gc
+        JOIN challenges c ON c.id = gc.challenge_id
+        WHERE gc.group_id = ? AND gc.status = 'active'
+        ORDER BY gc.started_at DESC, gc.assigned_at DESC
+        LIMIT 1
+    """, (group_id,)).fetchone()
+
+    inactive_challenges = db_con.execute("""
+        SELECT c.*, gc.status
+        FROM group_challenges gc
+        JOIN challenges c ON c.id = gc.challenge_id
+        WHERE gc.group_id = ? AND gc.status != 'active'
+        ORDER BY gc.assigned_at DESC
+    """, (group_id,)).fetchall()
+
+    #search functionality
+    q = request.args.get("q", "").strip().lower()
+
+    challenges = db_con.execute("""
+        SELECT c.title, gc.status
+        FROM group_challenges gc
+        JOIN challenges c ON c.id = gc.challenge_id
+        WHERE gc.group_id = ?
+        AND lower(c.title) LIKE ?
+    """, (group_id, f"%{q}%")).fetchall()
+
     return render_template(
-        'group.html',
+        "group.html",
         group=group_row,
         owner=owner,
-        challenge=challenge,
-        group_members=group_members
+        group_members=group_members,
+        active_challenge=active_challenge,
+        inactive_challenges=inactive_challenges,
+        is_member=is_member,
+        challenges=challenges,
+        q=q
     )
 
 # -------- Create Group ---------
