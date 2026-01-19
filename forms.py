@@ -32,6 +32,8 @@ class GroupForm(FlaskForm):
     start_challenge = SubmitField('Start Challenge')
     add_challenge = SubmitField('Add Challenge')
     delete_challenge = SubmitField('Delete Challenge')
+    set_active = SubmitField('Set Active')
+    completed_challenge = SubmitField('Completed Challenge')
     leave_group = SubmitField('Leave Group') #fehlt
     delete_group = SubmitField('Delete Group') #fehlt
     remove_member = SubmitField('Remove Member') #fehlt
