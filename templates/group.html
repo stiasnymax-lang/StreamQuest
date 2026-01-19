@@ -55,7 +55,7 @@
     <fieldset>
         <legend>Challenge Overlay Link</legend>
         <p>Use the following link to access the challenge overlay:</p>
-        <input type="text" readonly value="{{ url_for('overlay', group_id=group.id, _external=True) }}" style="width:100%;">
+        <input type="text" readonly value="{{ url_for('overlay', group_id=group.id, _external=True) }}" style="width:100%;"> <!-- Mit KI generiert -->
     </fieldset>
 
         <!-- Challenge-Suche -->
@@ -64,15 +64,15 @@
         <input type="search" name="q" placeholder="Search challenges to add" value="{{ q }}">
     </form>
     <h3>Search Results</h3>
-    <ul>
-        {% for ch in challenges %}
-            <li>{{ ch.title }} ({{ ch.status }})</li>
-            <!-- Challenge-Add-Button -->
-            <form method="POST">
-                <button type="submit">Add Challenge</button>
-            </form>
-        {% else %}
-            <li>No challenges found.</li>
-        {% endfor %}
-    </ul>
+{% for challenge in challenges %}
+    <li>
+        {{ challenge.title }} ({{ challenge.status }})
+        <form method="POST" action="{{ url_for('group', group_id=group.id) }}">
+        {{ form.csrf_token }}
+        {{ form.group_id(value=group.id) }}
+        {{ form.challenge_id(value=challenge.id) }}
+        {{ form.add_challenge() }}
+        </form>
+    </li>
+{% endfor %}
 {% endblock %}

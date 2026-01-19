@@ -17,9 +17,36 @@ INSERT INTO users (username, password, email) VALUES
 
 -- Challenges
 INSERT INTO challenges (title, description, difficulty, game_name, time_needed) VALUES
-('Challenge 1', 'Complete level 1', 1, 'Game A', 30),
-('Challenge 2', 'Defeat the boss', 3, 'Game B', 60),
-('Challenge 3', 'Find the hidden item', 2, 'Game C', 45);
+('First Blood', 'Defeat your first enemy without taking damage', 1, 'Any Action Game', 10),
+('Speedrunner', 'Complete a level in under half the expected time', 2, 'Platformer', 20),
+('Sharpshooter', 'Achieve 80% accuracy in a single mission', 3, 'FPS Game', 30),
+('Survivor', 'Survive 10 minutes without dying', 2, 'Survival Game', 15),
+('Boss Slayer', 'Defeat a boss without using healing items', 4, 'RPG', 45),
+('Explorer', 'Discover all hidden areas in one map', 2, 'Open World Game', 30),
+('Pacifist', 'Complete a level without killing any enemies', 4, 'Stealth Game', 25),
+('Resource Manager', 'Finish a mission using only starting resources', 3, 'Strategy Game', 40),
+('Combo Master', 'Perform a combo of 20 hits or more', 3, 'Fighting Game', 15),
+('Untouchable', 'Complete a stage without taking any damage', 5, 'Action Game', 35),
+('Collector', 'Collect all optional items in a level', 2, 'Adventure Game', 20),
+('Nightmare Mode', 'Complete a mission on the highest difficulty', 5, 'Any Game', 60),
+('Stealth Assassin', 'Eliminate all targets without being detected', 4, 'Stealth Game', 40),
+('No HUD', 'Complete a level with the HUD disabled', 4, 'FPS Game', 30),
+('Speed Builder', 'Build a functional base in under 10 minutes', 2, 'Simulation Game', 20),
+('Ironman', 'Finish a mission without reloading a save', 5, 'RPG', 60),
+('Sniper Elite', 'Get 5 headshots in a row without missing', 3, 'Shooter Game', 15),
+('Minimalist', 'Win a match using only basic equipment', 3, 'Multiplayer Game', 25),
+('Marathon', 'Play continuously for 2 hours without losing', 4, 'Arcade Game', 120),
+('Tactician', 'Win a battle without losing any units', 4, 'Strategy Game', 45),
+('Hardcore Start', 'Complete the tutorial on hardest difficulty', 2, 'Any Game', 15),
+('Puzzle Genius', 'Solve a complex puzzle without hints', 3, 'Puzzle Game', 20),
+('Economist', 'Finish a mission with maximum currency left', 3, 'RPG', 35),
+('Environmental Kill', 'Defeat an enemy using the environment', 2, 'Action Game', 10),
+('One Weapon Only', 'Complete a level using only one weapon', 3, 'Shooter Game', 30),
+('Blind Run', 'Complete a level without using the map', 4, 'Adventure Game', 25),
+('Flawless Victory', 'Win a fight without taking any hits', 4, 'Fighting Game', 10),
+('Speed Healer', 'Revive a teammate within 3 seconds', 2, 'Multiplayer Game', 5),
+('Last Stand', 'Win with less than 10% health remaining', 3, 'Action Game', 15),
+('Completionist', 'Achieve 100% completion in a chapter', 5, 'Story Game', 90);
 
 -- Groups (ohne challenge_id)
 INSERT INTO groups (name, password, owner_id) VALUES

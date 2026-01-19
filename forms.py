@@ -5,8 +5,8 @@ from wtforms.validators import InputRequired, Length
 class CreateGroupForm(FlaskForm): 
     name = StringField(validators=[InputRequired(), Length(min=2)])  
     password = PasswordField(validators=[InputRequired(), Length(min=3)])
+    user_id = HiddenField()
     submit = SubmitField('Create')
-    user_id = HiddenField() 
 
 class ProfileForm(FlaskForm):
     user_id = HiddenField()
@@ -27,14 +27,14 @@ class JoinGroupForm(FlaskForm):
     submit = SubmitField('Join Group')
 
 class GroupForm(FlaskForm):
+    challenge_id = HiddenField()
     group_id = HiddenField()
-    submit = SubmitField('Start Challenge')
-    submit = SubmitField('Add Challenge')
-    submit = SubmitField('Leave Group') #fehlt
-    submit = SubmitField('Delete Group') #fehlt
-    submit = SubmitField('Remove Member') #fehlt
+    start_challenge = SubmitField('Start Challenge')
+    add_challenge = SubmitField('Add Challenge')
+    leave_group = SubmitField('Leave Group') #fehlt
+    delete_group = SubmitField('Delete Group') #fehlt
+    remove_member = SubmitField('Remove Member') #fehlt
     submit = SubmitField('Search') #fehlt
-
 
 class ChallengeForm(FlaskForm):
     title = StringField(validators=[InputRequired(), Length(min=2)])
@@ -42,8 +42,6 @@ class ChallengeForm(FlaskForm):
     difficulty = StringField(validators=[InputRequired()])
     game_name = StringField(validators=[InputRequired(), Length(min=2)])
     time_needed = StringField(validators=[InputRequired()])
-    submit = SubmitField('Create Challenge') #Sollen User Erstellen koennen?
 
 class GroupsSearchForm(FlaskForm):
-    g = StringField() #unused?
     submit = SubmitField('Search') #fehlt

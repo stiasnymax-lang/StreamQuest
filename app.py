@@ -242,12 +242,13 @@ def join_group(group_id):
             flash('Please enter the group password.', 'error')
         return render_template('join_group.html', form=form, group=group_row)
 
-@app.route('/group/<int:group_id>/')
+@app.route('/group/<int:group_id>/', methods=["GET", "POST"])
 def group(group_id):
     logincheck()
     
     db_con = db.get_db_con()
     user_id = session['user_id']
+    form = forms.GroupForm()
     
     # Prüfe, ob User Mitglied oder Owner ist
     is_member = db_con.execute(
@@ -303,25 +304,40 @@ def group(group_id):
     q = request.args.get("q", "").strip().lower()
 
     challenges = db_con.execute("""
-        SELECT c.title, gc.status
-        FROM group_challenges gc
-        JOIN challenges c ON c.id = gc.challenge_id
-        WHERE gc.group_id = ?
-        AND lower(c.title) LIKE ?
-    """, (group_id, f"%{q}%")).fetchall()
+        SELECT id, title
+        FROM challenges
+        WHERE title LIKE ?;
+    """, (f"%{q}%",)).fetchall()
 
-    return render_template(
-        "group.html",
-        group=group_row,
-        owner=owner,
-        group_members=group_members,
-        active_challenge=active_challenge,
-        done_challenges=done_challenges,
-        queued_challenges=queued_challenges, 
-        is_member=is_member,
-        challenges=challenges,
-        q=q
-    )
+
+    if request.method == 'GET':
+        return render_template(
+            "group.html",
+            group=group_row,
+            owner=owner,
+            group_members=group_members,
+            active_challenge=active_challenge,
+            done_challenges=done_challenges,
+            queued_challenges=queued_challenges, 
+            is_member=is_member,
+            challenges=challenges,
+            q=q,
+            form=form
+        )
+    else: #request.method == 'POST'
+        
+        if form.validate_on_submit():
+            if form.add_challenge.data:
+                sql_query = """
+                    INSERT OR IGNORE INTO group_challenges (group_id, challenge_id)
+                    VALUES (?, ?);
+                """
+                db_con.execute(sql_query, [form.group_id.data, form.challenge_id.data])
+                db_con.commit()
+                flash('Challenge has been added', 'success')
+            return redirect(url_for('group', group_id=group_id))
+
+
 
 # -------- Create Group ---------
 
