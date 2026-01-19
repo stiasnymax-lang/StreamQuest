@@ -54,11 +54,13 @@
     {% if done_challenges %}
         <ul>
             {% for ch in done_challenges %}
-            <li>{{ ch.title }} ({{ ch.status }})</li>
+            <li>
+                {{ ch.title }} 
+                ({{ ch.status }})
+            </li>
             {% endfor %}
         </ul>
     {% endif %}
-
 
     <!-- Overlay-Link -->
     <fieldset>

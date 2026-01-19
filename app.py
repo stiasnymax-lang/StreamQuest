@@ -306,8 +306,10 @@ def group(group_id):
     challenges = db_con.execute("""
         SELECT id, title
         FROM challenges
-        WHERE title LIKE ?;
-    """, (f"%{q}%",)).fetchall()
+        WHERE title LIKE ? AND id NOT IN (
+            SELECT challenge_id FROM group_challenges WHERE group_id = ?
+        );
+    """, (f"%{q}%", group_id)).fetchall()
 
 
     if request.method == 'GET':
