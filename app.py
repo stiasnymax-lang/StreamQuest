@@ -190,10 +190,13 @@ def profile():
 @app.route('/groups/')
 def groups():
     db_con = db.get_db_con()
+        #search functionality
+    g = request.args.get("g", "").strip().lower()
+
     groups = db_con.execute(
-        "SELECT id, name FROM groups ORDER BY name"
+        "SELECT id, name FROM groups WHERE lower(name) LIKE ? ORDER BY name", (f"%{g}%",)
     ).fetchall()
-    return render_template('groups.html', groups=groups)
+    return render_template('groups.html', groups=groups, g=g)
 
 @app.route('/join/<int:group_id>/')
 def join_group(group_id):

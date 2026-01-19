@@ -4,6 +4,9 @@
 
 {% block content %}
 <h1>Alle Gruppen</h1>
+    <form method="get">
+        <input type="search" name="g" placeholder="Search group to join" value="{{ g }}">
+    </form>
 <ul>
     {% for group in groups %}
     <li>

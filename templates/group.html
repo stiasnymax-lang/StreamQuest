@@ -20,10 +20,7 @@
     <form method="POST">
         <button type="submit">Start Challenge</button>
     </form>
-    <!-- Challenge-Add-Button -->
-    <form method="POST">
-        <button type="submit">Add Challenge</button>
-    </form>
+
 
     <!-- Aktive Challenge -->
 
@@ -70,6 +67,10 @@
     <ul>
         {% for ch in challenges %}
             <li>{{ ch.title }} ({{ ch.status }})</li>
+            <!-- Challenge-Add-Button -->
+            <form method="POST">
+                <button type="submit">Add Challenge</button>
+            </form>
         {% else %}
             <li>No challenges found.</li>
         {% endfor %}

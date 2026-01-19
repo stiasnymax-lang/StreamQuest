@@ -43,3 +43,7 @@ class ChallengeForm(FlaskForm):
     game_name = StringField(validators=[InputRequired(), Length(min=2)])
     time_needed = StringField(validators=[InputRequired()])
     submit = SubmitField('Create Challenge') #Sollen User Erstellen koennen?
+
+class GroupsSearchForm(FlaskForm):
+    g = StringField() #unused?
+    submit = SubmitField('Search') #fehlt
