@@ -335,6 +335,14 @@ def group(group_id):
                 db_con.execute(sql_query, [form.group_id.data, form.challenge_id.data])
                 db_con.commit()
                 flash('Challenge has been added', 'success')
+            if form.delete_challenge.data:
+                sql_query = """
+                    DELETE FROM group_challenges
+                    WHERE group_id = ? AND challenge_id = ?;
+                """
+                db_con.execute(sql_query, [form.group_id.data, form.challenge_id.data])
+                db_con.commit()
+                flash('Challenge has been deleted', 'success')
             return redirect(url_for('group', group_id=group_id))
 
 
