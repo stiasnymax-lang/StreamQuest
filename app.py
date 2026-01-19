@@ -304,7 +304,7 @@ def group(group_id):
     q = request.args.get("q", "").strip().lower()
 
     challenges = db_con.execute("""
-        SELECT id, title
+        SELECT id, title, game_name
         FROM challenges
         WHERE title LIKE ? AND id NOT IN (
             SELECT challenge_id FROM group_challenges WHERE group_id = ?

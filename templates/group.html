@@ -77,7 +77,7 @@
     <h3>Search Results</h3>
 {% for challenge in challenges %}
     <li>
-        {{ challenge.title }} ({{ challenge.status }})
+        {{ challenge.title }} ({{ challenge.game_name }})
         <form method="POST" action="{{ url_for('group', group_id=group.id) }}">
         {{ form.csrf_token }}
         {{ form.group_id(value=group.id) }}
