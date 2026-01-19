@@ -40,11 +40,19 @@ def overlay(group_id):
         LIMIT 1
     """, (group_id,)).fetchone()
 
-    inactive_challenges = db_con.execute("""
+    done_challenges = db_con.execute("""
         SELECT c.*, gc.status
         FROM group_challenges gc
         JOIN challenges c ON c.id = gc.challenge_id
-        WHERE gc.group_id = ? AND gc.status != 'active'
+        WHERE gc.group_id = ? AND gc.status = 'done'
+        ORDER BY gc.assigned_at DESC
+    """, (group_id,)).fetchall()
+
+    queued_challenges = db_con.execute("""
+        SELECT c.*, gc.status
+        FROM group_challenges gc
+        JOIN challenges c ON c.id = gc.challenge_id
+        WHERE gc.group_id = ? AND gc.status = 'queued'
         ORDER BY gc.assigned_at DESC
     """, (group_id,)).fetchall()
 
@@ -52,7 +60,8 @@ def overlay(group_id):
         'overlay.html',
         group_name=group_row['name'],
         active_challenge=active_challenge,
-        inactive_challenges=inactive_challenges
+        queued_challenges=queued_challenges,
+        done_challenges=done_challenges
         )
 
 # -------- Challenges --------
@@ -271,11 +280,19 @@ def group(group_id):
         LIMIT 1
     """, (group_id,)).fetchone()
 
-    inactive_challenges = db_con.execute("""
+    done_challenges = db_con.execute("""
         SELECT c.*, gc.status
         FROM group_challenges gc
         JOIN challenges c ON c.id = gc.challenge_id
-        WHERE gc.group_id = ? AND gc.status != 'active'
+        WHERE gc.group_id = ? AND gc.status = 'done'
+        ORDER BY gc.assigned_at DESC
+    """, (group_id,)).fetchall()
+
+    queued_challenges = db_con.execute("""
+        SELECT c.*, gc.status
+        FROM group_challenges gc
+        JOIN challenges c ON c.id = gc.challenge_id
+        WHERE gc.group_id = ? AND gc.status = 'queued'
         ORDER BY gc.assigned_at DESC
     """, (group_id,)).fetchall()
 
@@ -296,7 +313,8 @@ def group(group_id):
         owner=owner,
         group_members=group_members,
         active_challenge=active_challenge,
-        inactive_challenges=inactive_challenges,
+        done_challenges=done_challenges,
+        queued_challenges=queued_challenges, 
         is_member=is_member,
         challenges=challenges,
         q=q

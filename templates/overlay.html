@@ -9,17 +9,17 @@
 <body>
     {% if active_challenge %}
         <h1>Aktive Challenge</h1>
-        <p><strong>{{ active_challenge.title }}</strong></p>
+        <li><strong>{{ active_challenge.title }}</strong></li>
         <p>{{ active_challenge.description }}</p>
     {% else %}
         <p>Gerade keine aktive Challenge</p>
     {% endif %}
 
     <h2>Restliche Challenges</h2>
-    {% if inactive_challenges %}
+    {% if queued_challenges %}
 
         <ul>
-            {% for ch in inactive_challenges %}
+            {% for ch in queued_challenges %}
             <li>{{ ch.title }} ({{ ch.status }})</li>
             {% endfor %}
         </ul>

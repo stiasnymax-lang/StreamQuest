@@ -25,35 +25,34 @@
         <button type="submit">Add Challenge</button>
     </form>
 
-    <!-- Challenge-Suche -->
-    <form method="get">
-        <input type="search" name="q" placeholder="Search challenges..." value="{{ q }}">
-    </form>
-
-    <ul>
-        {% for ch in challenges %}
-            <li>{{ ch.title }} ({{ ch.status }})</li>
-        {% else %}
-            <li>No challenges found.</li>
-        {% endfor %}
-    </ul>
+    <!-- Aktive Challenge -->
 
     {% if active_challenge %}
         <h1>Aktive Challenge</h1>
-        <p><strong>{{ active_challenge.title }}</strong></p>
+        <li><strong>{{ active_challenge.title }}</strong></li>
         <p>{{ active_challenge.description }}</p>
     {% else %}
         <p>Gerade keine aktive Challenge</p>
     {% endif %}
 
     <h2>Restliche Challenges</h2>
-    {% if inactive_challenges %}
+    {% if queued_challenges %}
         <ul>
-            {% for ch in inactive_challenges %}
+            {% for ch in queued_challenges %}
             <li>{{ ch.title }} ({{ ch.status }})</li>
             {% endfor %}
         </ul>
     {% endif %}
+
+        <h2>Erledigte Challenges</h2>
+    {% if done_challenges %}
+        <ul>
+            {% for ch in done_challenges %}
+            <li>{{ ch.title }} ({{ ch.status }})</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
 
     <!-- Overlay-Link -->
     <fieldset>
@@ -62,4 +61,17 @@
         <input type="text" readonly value="{{ url_for('overlay', group_id=group.id, _external=True) }}" style="width:100%;">
     </fieldset>
 
+        <!-- Challenge-Suche -->
+    <h2>Search Challenges to Add</h2>
+    <form method="get">
+        <input type="search" name="q" placeholder="Search challenges to add" value="{{ q }}">
+    </form>
+    <h3>Search Results</h3>
+    <ul>
+        {% for ch in challenges %}
+            <li>{{ ch.title }} ({{ ch.status }})</li>
+        {% else %}
+            <li>No challenges found.</li>
+        {% endfor %}
+    </ul>
 {% endblock %}
