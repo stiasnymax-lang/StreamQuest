@@ -268,6 +268,11 @@ def group(group_id):
         (group_row["owner_id"],)
     ).fetchone()
 
+    group_challenges = db_con.execute(
+        "SELECT * FROM group_challenges WHERE group_id = ?",
+        (group_id,)
+    ).fetchall()
+
     group_members = db_con.execute("""
         SELECT u.id, u.username, owner_id
         FROM group_members gm 
@@ -324,7 +329,8 @@ def group(group_id):
             is_member=is_member,
             challenges=challenges,
             q=q,
-            form=form
+            form=form,
+            group_challenges=group_challenges
         )
     else: #request.method == 'POST'
         
@@ -334,7 +340,7 @@ def group(group_id):
                     INSERT OR IGNORE INTO group_challenges (group_id, challenge_id)
                     VALUES (?, ?);
                 """
-                db_con.execute(sql_query, [form.group_id.data, form.challenge_id.data])
+                db_con.execute(sql_query, [group_id, form.challenge_id.data])
                 db_con.commit()
                 flash('Challenge has been added', 'success')
             if form.delete_challenge.data:
@@ -342,24 +348,26 @@ def group(group_id):
                     DELETE FROM group_challenges
                     WHERE group_id = ? AND challenge_id = ?;
                 """
-                db_con.execute(sql_query, [form.group_id.data, form.challenge_id.data])
+                db_con.execute(sql_query, [group_id, form.challenge_id.data])
                 db_con.commit()
                 flash('Challenge has been deleted', 'success')
-            if form.set_active.data:
-                # Setze alle aktuellen Challenges auf 'queued'
+
+            if form.set_active.data:             
+                # alte active deaktivieren
                 db_con.execute("""
                     UPDATE group_challenges
                     SET status = 'queued', started_at = NULL
                     WHERE group_id = ? AND status = 'active';
-                """, (form.group_id.data,))
+                """, (group_id,))
+                db_con.commit()
                 
-                # Setze die ausgewählte Challenge auf 'active'
+                # neue active setzen
                 db_con.execute("""
                     UPDATE group_challenges
                     SET status = 'active', started_at = CURRENT_TIMESTAMP
                     WHERE group_id = ? AND challenge_id = ?;
-                """, (form.group_id.data, form.challenge_id.data))
-                
+                """, (group_id, form.challenge_id.data))
+
                 db_con.commit()
                 flash('Active challenge has been updated.', 'success')
 
@@ -367,11 +375,20 @@ def group(group_id):
                 # Markiere die aktive Challenge als 'done'
                 db_con.execute("""
                     UPDATE group_challenges
-                    SET status = 'done'
+                    SET status = 'done', finished_at = CURRENT_TIMESTAMP
                     WHERE group_id = ? AND challenge_id = ?;
-                """, (form.group_id.data, form.challenge_id.data))
+                """, (group_id, form.challenge_id.data))
                 db_con.commit()
                 flash('Challenge marked as completed.', 'success')
+            
+            if form.start_session.data:
+                db_con.execute("""
+                    UPDATE groups
+                    SET session_start = CURRENT_TIMESTAMP
+                    WHERE id = ?;
+                """, (group_id,))
+                db_con.commit()
+                flash('Session has been started', 'success')
 
             return redirect(url_for('group', group_id=group_id))
 

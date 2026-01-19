@@ -16,11 +16,12 @@
         {% endfor %}
     </ul>
 
-    <!-- Challenge-Start-Button -->
-    <form method="POST">
-        <button type="submit">Start Challenge</button>
+    <!-- Session-Start-Button -->
+    <form method="POST" action="{{ url_for('group', group_id=group.id) }}">
+        {{ form.csrf_token }}
+        {{ form.challenge_id(value=active_challenge.id) }}
+        {{ form.start_session() }}
     </form>
-
 
     <!-- Aktive Challenge -->
 
@@ -30,12 +31,13 @@
             <form method="POST" action="{{ url_for('group', group_id=group.id) }}">
             {{ form.csrf_token }}
             <strong>{{ active_challenge.title }}</strong>
-            {{ form.group_id(value=group.id) }} 
             {{ form.challenge_id(value=active_challenge.id) }}
             {{ form.completed_challenge() }}
+            </form>
         </li>
         <p>{{ active_challenge.game_name }}</p>
         <p><small>{{ active_challenge.description }}</small></p>
+            
     {% else %}
         <p>Gerade keine aktive Challenge</p>
     {% endif %}
@@ -50,13 +52,11 @@
                 {{ ch.title }}
                 ({{ ch.game_name }})
                 <small> ({{ ch.status }}) </small>
-                {{ form.group_id(value=group.id) }} 
                 {{ form.challenge_id(value=ch.id) }}
                 {{ form.delete_challenge() }}
                 {{ form.set_active() }}
                 </form>
             </li>
-
             {% endfor %}
         </ul>
     {% endif %}
@@ -68,6 +68,7 @@
             <li>
                 {{ ch.title }} 
                 ({{ ch.status }})
+                <small>(time needed: {{group_challenges.started_at}} - {{group_challenges.finished_at}})</small>
             </li>
             {% endfor %}
         </ul>
@@ -91,7 +92,6 @@
         {{ challenge.title }} ({{ challenge.game_name }})
         <form method="POST" action="{{ url_for('group', group_id=group.id) }}">
         {{ form.csrf_token }}
-        {{ form.group_id(value=group.id) }}
         {{ form.challenge_id(value=challenge.id) }}
         {{ form.add_challenge() }}
         </form>

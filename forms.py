@@ -28,8 +28,7 @@ class JoinGroupForm(FlaskForm):
 
 class GroupForm(FlaskForm):
     challenge_id = HiddenField()
-    group_id = HiddenField()
-    start_challenge = SubmitField('Start Challenge')
+    start_session = SubmitField('Start Session')
     add_challenge = SubmitField('Add Challenge')
     delete_challenge = SubmitField('Delete Challenge')
     set_active = SubmitField('Set Active')
