@@ -10,12 +10,6 @@ nav_order: 3
 {: .no_toc }
 # Reference documentation
 
-{: .attention }
-> This page collects internal functions, routes with their functions, and APIs (if any).
-> 
-> See [Uber](https://developer.uber.com/docs/drivers/references/api) or [PayPal](https://developer.paypal.com/api/rest/) for exemplary high-quality API reference documentation.
->
-> You may delete this `attention` box.
 
 <details open markdown="block">
 {: .text-delta }
@@ -24,62 +18,199 @@ nav_order: 3
 {: toc }
 </details>
 
-## [Section / module]
+## Routes
 
-### `function_definition()`
+### `index()`
 
-**Route:** `/route/`
-
-**Methods:** `POST` `GET` `PATCH` `PUT` `DELETE`
-
-**Purpose:** [Short explanation of what the function does and why]
-
-**Sample output:**
-
-[Show an image, string output, or similar illustration -- or write NONE if function generates no output]
-
----
-
-## [Example, delete this section] Show to-do lists
-
-### `get_lists()`
-
-**Route:** `/lists/`
+**Route:** `/`
 
 **Methods:** `GET`
 
-**Purpose:** Show all to-do lists.
+**Purpose:** Render the landing page.
 
-**Sample output:**
-
-![get_lists() sample](../assets/images/fswd-intro_00.png)
+**Sample output:** HTML page (`index.html`).
 
 ---
 
-### `get_list_todos(list_id)`
+### `overlay(group_id)`
 
-**Route:** `/lists/<int:list_id>`
+**Route:** `/overlay/<int:group_id>/`
 
 **Methods:** `GET`
 
-**Purpose:** Retrieve all to-do items of to-do list with ID `list_id` from database and present to user.
+**Purpose:** Display an overlay view for a specific group. Supports returning either an HTML overlay page or a JSON payload for polling/stream overlays.
+
+**Query parameters:**
+- `json` (optional): if present (e.g. `?json=1`), the route returns a JSON response instead of HTML.
+
+**Authentication:** Requires login (`logincheck()`).
 
 **Sample output:**
 
-![get_list_todos() sample](../assets/images/fswd-intro_02.png)
+- **HTML mode (default):** renders `overlay.html`
+- **JSON mode (`?json=1`):**
+```json
+{
+  "group_name": "My Group",
+  "active_challenge": {"id": 1, "title": "Example", "status": "active"},
+  "queued_challenges": [{"id": 2, "title": "Next challenge", "status": "queued"}]
+}
+```
 
 ---
 
-## [Example, delete this section] Insert sample data
+## Challenges
+
+### `challenges()`
+
+**Route:** `/challenges/`
+
+**Methods:** `GET`
+
+**Purpose:** List all challenges with optional title filtering.
+
+**Query parameters:**
+- `c` (optional): filter string matched against `title` via SQL `LIKE`.
+
+---
+
+### `challenge(challenge_id)`
+
+**Route:** `/challenge/<int:challenge_id>/`
+
+**Methods:** `GET`
+
+**Purpose:** Show details for a single challenge.
+
+**Errors:** `404` if the challenge does not exist.
+
+---
+
+## Static pages
+
+### `support()`
+
+**Route:** `/support/`
+
+**Methods:** `GET`
+
+**Purpose:** Render the support page.
+
+---
+
+### `pricing()`
+
+**Route:** `/pricing/`
+
+**Methods:** `GET`
+
+**Purpose:** Render the pricing page.
+
+---
+
+### `guide()`
+
+**Route:** `/guide/`
+
+**Methods:** `GET`
+
+**Purpose:** Render the guide page.
+
+---
+
+## Authentication
+
+### `login()`
+
+**Route:** `/login/`
+
+**Methods:** `GET` `POST`
+
+**Purpose:** Authenticate a user and create a session.
+
+---
+
+### `register()`
+
+**Route:** `/register/`
+
+**Methods:** `GET` `POST`
+
+**Purpose:** Register a new user.
+
+---
+
+## Profile
+
+### `profile()`
+
+**Route:** `/profile/`
+
+**Methods:** `GET`
+
+**Purpose:** Show the profile of the logged-in user.
+
+---
+
+## Groups
+
+### `groups()`
+
+**Route:** `/groups/`
+
+**Methods:** `GET`
+
+**Purpose:** List groups with optional search.
+
+---
+
+### `join_group(group_id)`
+
+**Route:** `/join/<int:group_id>/`
+
+**Methods:** `GET` `POST`
+
+**Purpose:** Join a group by providing the group password.
+
+---
+
+### `group(group_id)`
+
+**Route:** `/group/<int:group_id>/`
+
+**Methods:** `GET` `POST`
+
+**Purpose:** Display and manage a group and its challenges.
+
+---
+
+## Create group
+
+### `create_group()`
+
+**Route:** `/create_group/`
+
+**Methods:** `GET` `POST`
+
+**Purpose:** Create a new group.
+
+---
+
+## Utility / Sample data
 
 ### `run_insert_sample()`
 
-**Route:** `/insert/sample`
+**Route:** `/insert/sample/`
 
 **Methods:** `GET`
 
-**Purpose:** Flush the database and insert sample data set
+**Purpose:** Insert a predefined sample dataset into the database.
 
-**Sample output:**
+---
 
-Browser shows: `Database flushed and populated with some sample data.`
+## Internal helpers
+
+### `logincheck()`
+
+**Purpose:** Guard for protected routes. Redirects to login if user is not authenticated.
+
