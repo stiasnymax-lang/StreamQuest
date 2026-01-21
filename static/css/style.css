@@ -8,7 +8,7 @@ body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     color: #333;
-    background-color: #f4f4f4;
+    background-color: #2b1e36;
 }
 
 li {
@@ -61,7 +61,7 @@ nav {
 }
 
 nav a {
-    color: #fff;
+    color: #d9c7ff;
     text-decoration: none;
     margin-right: 1rem;
     padding: 0.5rem;

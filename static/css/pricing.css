@@ -18,10 +18,10 @@ body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     color: #333;
-    background-color: #f4f4f4;
+    background-color: #2b1e36;
 }
 nav a {
-    color: #fff;
+    color: #d9c7ff;
     text-decoration: none;
     margin-right: 1rem;
     padding: 0.5rem;
@@ -39,10 +39,10 @@ footer {
     margin-top: 2rem;
 }
 .pricing-page {
-    --pricing-ink: #141410;
-    --pricing-muted: #6b5f58;
-    --pricing-accent: #d85a2a;
-    --pricing-surface: #fff6ec;
+    --pricing-ink: #f4eefb;
+    --pricing-muted: #b9a9d2;
+    --pricing-accent: #b56aff;
+    --pricing-surface: #2f2238;
     font-family: "Palatino Linotype", "Book Antiqua", serif;
     color: var(--pricing-ink);
 }
@@ -65,16 +65,19 @@ footer {
 
 .pricing-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
     gap: 1.6rem;
+    max-width: 720px;
+    margin: 0 auto;
+    justify-content: center;
 }
 
 .pricing-card {
     position: relative;
     padding: 1.8rem 1.6rem;
     border-radius: 22px;
-    background: linear-gradient(160deg, #fff, #fef3e6);
-    box-shadow: 0 16px 40px rgba(20, 20, 16, 0.08);
+    background: linear-gradient(160deg, #3a2b46, #2f2238);
+    box-shadow: 0 16px 40px rgba(18, 10, 24, 0.4);
     display: grid;
     gap: 1.2rem;
     min-height: 320px;
@@ -82,7 +85,7 @@ footer {
 
 .pricing-featured {
     border: 2px solid rgba(216, 90, 42, 0.4);
-    background: linear-gradient(160deg, #fff1e4, #ffe7d6);
+    background: linear-gradient(160deg, #463054, #32243f);
 }
 
 .pricing-title h3 {
@@ -133,5 +136,9 @@ footer {
 @media (max-width: 720px) {
     .pricing-header {
         text-align: left;
+    }
+
+    .pricing-grid {
+        grid-template-columns: 1fr;
     }
 }
