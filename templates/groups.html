@@ -11,7 +11,7 @@
     {% for group in groups %}
     <li>
         <label for="{{ group.id }}">
-            <a href="{{ url_for('group', group_id=group.id) }}">{{ group.name }}</a>
+            <a href="{{ url_for('group', group_id=group.id) }}">{{ group.name }} (Members: {{ group.member_count + 1 }})</a>
         </label>
     </li>
     {% endfor %}

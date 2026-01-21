@@ -2,6 +2,18 @@ nav {
     background-color: #444;
     padding: 0.5rem;
 }
+
+nav a {
+    color: #d9c7ff;
+    text-decoration: none;
+    margin-right: 1rem;
+    padding: 0.5rem;
+}
+
+nav a:hover {
+    background-color: #555;
+    border-radius: 4px;
+}
 *{
     margin: 0;
     padding: 0;
@@ -17,20 +29,13 @@ body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     color: #333;
-    background-color: #2b1e36;
+    background-color: #1A1024;
 }
-nav a {
+a:-webkit-any-link {
     color: #d9c7ff;
+    cursor: pointer;
     text-decoration: none;
-    margin-right: 1rem;
-    padding: 0.5rem;
 }
-
-nav a:hover {
-    background-color: #555;
-    border-radius: 4px;
-}
-
 footer {
     background-color: #333;
     color: #fff;
@@ -39,12 +44,12 @@ footer {
     margin-top: 2rem;
 }
 .profile-page {
-    --profile-ink: #f4eefb;
-    --profile-muted: #b9a9d2;
-    --profile-accent: #9b79ff;
+    --profile-ink:  #f5efff;
+    --profile-muted: #c2b4d6;
+    --profile-accent: #7f66ff;
     --profile-cream: #2f2238;
-    --profile-card: #31243d;
-    font-family: "Georgia", "Times New Roman", serif;
+    --profile-card: #2f2238;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     color: var(--profile-ink);
 }
 
@@ -52,31 +57,13 @@ footer {
     position: relative;
     padding: 2.5rem;
     border-radius: 24px;
-    background: linear-gradient(135deg, #3a2b46 0%, #2f2238 45%, #251a30 100%);
+    background: none;
     overflow: hidden;
 }
 
-.profile-shell::before {
-    content: "";
-    position: absolute;
-    top: -120px;
-    right: -80px;
-    width: 260px;
-    height: 260px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(212, 106, 74, 0.5), rgba(212, 106, 74, 0));
-}
 
-.profile-shell::after {
-    content: "";
-    position: absolute;
-    left: -120px;
-    bottom: -140px;
-    width: 320px;
-    height: 320px;
-    background: conic-gradient(from 120deg, rgba(28, 26, 22, 0.08), rgba(28, 26, 22, 0));
-    border-radius: 40%;
-}
+
+
 
 .profile-hero {
     position: relative;
@@ -92,8 +79,8 @@ footer {
     width: 72px;
     height: 72px;
     border-radius: 18px;
-    background: #1f1727;
-    color: #f4eefb;
+    background: #1c1a16;
+    color: #f7f1e9;
     display: grid;
     place-items: center;
     font-size: 1.4rem;
@@ -145,7 +132,7 @@ footer {
     background: var(--profile-card);
     border-radius: 18px;
     padding: 1.5rem;
-    box-shadow: 0 16px 40px rgba(18, 10, 24, 0.4);
+    box-shadow: 0 16px 40px rgba(28, 26, 22, 0.08);
 }
 
 .profile-card h3 {
@@ -186,4 +173,18 @@ footer {
     .profile-btn {
         width: 100%;
     }
+}
+
+button {
+    background-color: #A051F6;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #7a36c4;
 }

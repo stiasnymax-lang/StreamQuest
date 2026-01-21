@@ -205,9 +205,16 @@ def groups():
         #search functionality
     g = request.args.get("g", "").strip().lower()
 
-    groups = db_con.execute(
-        "SELECT id, name FROM groups WHERE lower(name) LIKE ? ORDER BY name", (f"%{g}%",)
-    ).fetchall()
+    groups = db_con.execute("""
+        SELECT
+        g.id, g.name,
+        COUNT(gm.user_id) AS member_count
+        FROM groups g
+        LEFT JOIN group_members gm ON gm.group_id = g.id
+        GROUP BY g.id, g.name
+        ORDER BY g.name
+    """).fetchall()
+
     return render_template('groups.html', groups=groups, g=g)
 
 @app.route('/join/<int:group_id>/')
