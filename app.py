@@ -401,7 +401,7 @@ def group(group_id):
                 db_con.commit()
                 flash('Session has been started', 'success')
 
-                return redirect(url_for('group', group_id=group_id))
+            return redirect(url_for('group', group_id=group_id))
 
 # -------- Create Group ---------
 

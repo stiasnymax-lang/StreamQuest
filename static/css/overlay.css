@@ -1,10 +1,10 @@
-/* Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Grundlayout */
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
     background: rgba(0, 0, 0, 0.65); /* transparent für OBS */
@@ -14,29 +14,74 @@ body {
     height: 100vh;
 }
 
-/* Challenge-Liste */
-ul {
+/* Main-Layout: 2 Bereiche untereinander */
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Sections */
+#activeSection,
+#queuedSection {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 14px;
+    max-width: 440px; /* OBS: nicht zu breit */
+}
+
+/* Überschriften */
+#activeSection h2,
+#queuedSection h2 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    opacity: 0.95;
+}
+
+/* Active Container */
+#activeContainer {
+    background: rgba(16, 243, 65, 0.219);
+    border-radius: 10px;
+    padding: 12px;
+    min-height: 52px;
+    max-width: 420px; 
+}
+
+.active-challenge .active-title {
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.active-challenge .active-desc {
+    font-size: 14px;
+    opacity: 0.9;
+    line-height: 1.3;
+}
+
+/* Queued Liste */
+#queuedList {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
+    margin-top: 6px;
 }
 
-/* Einzelne Challenge */
-li {
-    background: rgba(255, 255, 255, 0.08);
+/* Einzelne Challenge in der Queue */
+#queuedList li {
+    background: rgba(14, 28, 156, 0.247);
     padding: 10px 14px;
-    border-radius: 8px;
+    border-radius: 10px;
     transition: background 0.2s ease;
-    max-width: 200px;
+    max-width: 420px; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-
-/* Footer */
-footer {
-    position: fixed;
-    bottom: 8px;
-    right: 12px;
-    font-size: 12px;
-    opacity: 0.7;
+/* Empty Text */
+#queuedEmpty {
+    margin-top: 8px;
+    opacity: 0.85;
+    font-size: 14px;
 }

@@ -2,14 +2,14 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Overlay</title>
+    <title>{{ group_name }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/overlay.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
 
     <body>
     <header>
-        <h1 id="groupTitle">Overlay</h1>
+        <h1 id="groupTitle">{{ group_name }}</h1>
     </header>
 
     <main>
@@ -25,17 +25,7 @@
         <ul id="queuedList"></ul>
         <p id="queuedEmpty" style="display:none;">Keine weiteren Challenges in der Queue.</p>
         </section>
-
-        <section id="doneSection" style="display:none;">
-        <h2>Erledigte Challenges</h2>
-        <ul id="doneList"></ul>
-        <p id="doneEmpty" style="display:none;">Noch keine erledigten Challenges.</p>
-        </section>
     </main>
-
-    <footer>
-        <p>&copy; StreamQuest</p>
-    </footer>
 
     <script>
         // group_id wird serverseitig nur als Zahl eingesetzt
@@ -101,17 +91,10 @@
             els.groupTitle.textContent = groupName;
             document.title = groupName;
         }
-
         // Active
         renderActive(data.active_challenge);
-
         // Queued
         renderList(els.queuedList, els.queuedEmpty, data.queued_challenges, liChallenge);
-
-        // Done (optional anzeigen)
-        const hasDone = (data.done_challenges && data.done_challenges.length > 0);
-        els.doneSection.style.display = hasDone ? 'block' : 'none';
-        renderList(els.doneList, els.doneEmpty, data.done_challenges, liChallenge);
         }
 
         async function fetchJson() {
