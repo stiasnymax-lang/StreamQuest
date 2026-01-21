@@ -21,6 +21,12 @@ nav_order: 1
 ## Overview
 Diese Anwendung ist eine Flask-basierte Plattform für gemeinsame bestreiten von Herausforderungen, die es Nutzern ermöglicht, sich in Gruppen zu organisieren, Challenges zuzuweisen und den Fortschritt gemeinsam in Echtzeit zu verfolgen. Sie ist als serverseitig gerenderte Webanwendung mit dynamischen Erweiterungen (JSON-Endpunkte, Overlays) konzipiert, um es auch als OBS-Quelle Overlay zu generieren.
 
+## Technology stack
+- Backend: Python (Flask)
+- Frontend: HTML, CSS, Jinja, JSON
+- Database: CURRENTLY SQLite3 BUT SQAlchemy Models have been built an could be implimented. Can be found under Main-Branch models.py
+- 
+
 ## Codemap
 
 ## Home Screen
