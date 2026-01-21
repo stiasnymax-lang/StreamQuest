@@ -66,11 +66,12 @@ Speichert alle Challenges, die einer Gruppe zugeordnet sind und später im Overl
 | `group_id`    | INTEGER FK | Verweis auf `groups.id` (zugehörige Gruppe)             |
 | `challenge_id`| INTEGER FK | Verweis auf `challenger.id` (zugehörige Gruppe)         |
 | `status`      | TEXT       | Status der Challenge (z. B. `active`, `done`, `queued`) |
-| `assigned_at` | DATETIME   |         |
-| `startet_at`  | DATETIME   |         |
-| `finished_at` | DATETIME   |         |
+| `assigned_at` | DATETIME   | Wann die challenge zugeordnet wurde                     |
+| `startet_at`  | DATETIME   | Wann die challenge gestartet wurdet                     |
+| `finished_at` | DATETIME   | Wann die challenge beendet wurde                        |
 
 Primary keys sind `group_id` und `challenge_id`
+`startet_at` und `finished_at` wichtig um eventuell später Zeit pro Challenge zu berechnen
 
 ## Beziehungen
 
