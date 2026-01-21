@@ -4,7 +4,8 @@ nav_order: 1
 ---
 
 {: .label }
-[Jane Dane]
+[Max Stiasny]
+[Lukas Hoppart]
 
 {: .no_toc }
 # Value proposition
@@ -51,7 +52,7 @@ Zusätzlich bietet StreamQuest ein **Streamer-Dashboard** mit:
 - Twitch-Streamer, die abwechslungsreiche, unterhaltsame **24-Stunden-Streams** gestalten wollen  
 - Kleinere Creator & Community-Streamer, die nach kreativen Ideen suchen, um ihr Publikum zu aktivieren  
 - Streamer-Communities & Moderatoren, die Challenges für ihre Lieblingsstreamer einreichen oder mitverfolgen möchten  
-- *(Zukünftig:)* Plattformübergreifende Creator auf YouTube Live, Kick oder Trovo  
+- Gamer, die gemeinsam in einer Gruppe nach einer passenden Aktivität suchen
 
 
 ## Customer journey

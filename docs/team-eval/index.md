@@ -6,6 +6,6 @@ nav_order: 5
 
 {: .label }
 [Max Stiasny]
-[Lukas Hoppert]
+[Lukas Hoppart]
 
 # Team evaluation

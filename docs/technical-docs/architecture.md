@@ -6,7 +6,7 @@ nav_order: 1
 
 {: .label }
 [Max Stiasny]
-[Lukas Hoppert]
+[Lukas Hoppart]
 
 {: .no_toc }
 # Architecture

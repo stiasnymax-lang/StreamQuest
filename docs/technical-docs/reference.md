@@ -6,7 +6,7 @@ nav_order: 3
 
 {: .label }
 [Max Stiasny]
-[Lukas Hoppert]
+[Lukas Hoppart]
 
 {: .no_toc }
 # Reference documentation

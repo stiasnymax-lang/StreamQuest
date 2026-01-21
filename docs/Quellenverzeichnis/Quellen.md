@@ -1,3 +1,9 @@
+---
+title: Quellen
+parent: Quellenverzeichnis
+nav_order: 2
+---
+
 # Quellen
 
 ### app.py Zeile 59-64

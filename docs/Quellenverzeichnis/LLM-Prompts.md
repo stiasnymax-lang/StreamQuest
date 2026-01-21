@@ -1,3 +1,9 @@
+---
+title: LLM-Prompts
+parent: Quellenverzeichnis
+nav_order: 1
+---
+
 # LLM-Prompts
 
 ### Overlay.html 

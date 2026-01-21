@@ -5,7 +5,8 @@ nav_order: 4
 ---
 
 {: .label }
-[Jane Dane]
+[Max Stiasny]
+[Lukas Hoppart]
 
 {: .no_toc }
 # Summary of individual contributions
@@ -24,7 +25,7 @@ Contributions
 : Consetetur sadipscing elitr
 : ...
 
-## [Lukas Hoppert]
+## [Lukas Hoppart]
 
 Contributions
 : Diam nonumy eirmod

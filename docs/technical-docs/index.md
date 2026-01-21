@@ -6,6 +6,6 @@ nav_order: 2
 
 {: .label }
 [Max Stiasny]
-[Lukas Hoppert]
+[Lukas Hoppart]
 
 # Technical documentation
