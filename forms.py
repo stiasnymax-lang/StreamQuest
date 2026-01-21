@@ -8,8 +8,6 @@ class CreateGroupForm(FlaskForm):
     user_id = HiddenField()
     submit = SubmitField('Create')
 
-class ProfileForm(FlaskForm):
-    user_id = HiddenField()
 
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4, max=20)])
