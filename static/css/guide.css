@@ -1,0 +1,148 @@
+nav {
+    background-color: #444;
+    padding: 0.5rem;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+}
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f4f4;
+}
+.guide-page {
+    --guide-ink: #1f1a17;
+    --guide-muted: #6c6156;
+    --guide-accent: #1f6f5b;
+    --guide-paper: #f6f2ea;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    color: var(--guide-ink);
+}
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+}
+.guide-shell {
+    padding: 2.5rem;
+    border-radius: 28px;
+    background: radial-gradient(circle at top left, #ffffff 0%, #f1ebe1 45%, #e9dfd3 100%);
+}
+
+.guide-header h2 {
+    margin: 0.4rem 0 0.3rem;
+    font-size: 2rem;
+}
+
+.guide-kicker {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.75rem;
+    color: var(--guide-muted);
+}
+
+.guide-sub {
+    color: var(--guide-muted);
+}
+
+.guide-layout {
+    display: grid;
+    grid-template-columns: minmax(180px, 220px) 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.guide-toc {
+    position: sticky;
+    top: 1.5rem;
+    align-self: start;
+    padding: 1.2rem;
+    border-radius: 16px;
+    background: var(--guide-paper);
+    box-shadow: 0 12px 30px rgba(31, 26, 23, 0.08);
+}
+
+.guide-toc h3 {
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+}
+
+.guide-toc ol {
+    list-style: none;
+    padding-left: 0;
+    display: grid;
+    gap: 0.6rem;
+}
+
+.guide-toc a {
+    text-decoration: none;
+    color: var(--guide-ink);
+}
+
+.guide-toc a:hover {
+    color: var(--guide-accent);
+}
+
+.guide-steps {
+    display: grid;
+    gap: 1rem;
+}
+
+.guide-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 16px 40px rgba(31, 26, 23, 0.08);
+    animation: guideFade 0.4s ease forwards;
+}
+
+.guide-card h3 {
+    margin-bottom: 0.4rem;
+}
+
+.guide-step {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    background: var(--guide-accent);
+    color: #fff;
+    font-weight: 700;
+}
+
+@keyframes guideFade {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 900px) {
+    .guide-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .guide-toc {
+        position: relative;
+        top: 0;
+    }
+}

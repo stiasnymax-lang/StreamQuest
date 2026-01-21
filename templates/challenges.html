@@ -4,11 +4,15 @@
 
 {% block content %}
 <h1>Alle Challenges</h1>
+
+<form method="get">
+    <input type="search" name="c" placeholder="Search challenges" value="{{ c }}">
+</form>
 <ul>
     {% for challenge in challenges %}
     <li>
         <label for="{{ challenge.id }}">
-            <a href="{{ url_for('challenge', challenge_id=challenge.id) }}">{{ challenge.title }}</a>
+            <a href="{{ url_for('challenge', challenge_id=challenge.id) }}">{{ challenge.title }} ({{ challenge.game_name }})</a>
         </label>
     </li>
     {% endfor %}

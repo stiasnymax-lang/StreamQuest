@@ -1,10 +1,89 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/guide.css') }}">
 
-{% block title %}Guide{% endblock %}
+    </head>
+<body>
+    <nav>
+        <a href="/">Home</a> |  
+        <a href="/groups">Gruppen</a> | 
+        <a href="/pricing">Pricing</a> | 
+        <a href="/login">Login</a> | 
+        <a href="/guide">Guide</a> | 
+        <a href="/profile">Profil</a> | 
+        <a href="/create_group">Gruppe erstellen</a> | 
+        <a href="/support">Support</a> |
+        <a href="/challenges">Challenges</a> |
+    </nav>
+    <section class="guide-page">
+        <div class="guide-shell">
+            <header class="guide-header">
+                <p class="guide-kicker">How to use StreamQuest</p>
+                <h2>Dein Setup in 5 klaren Schritten</h2>
+                <p class="guide-sub">Kurze Anleitung, damit dein Stream sofort startet.</p>
+            </header>
 
-{% block content %}
-    <h2>Guide</h2>
-    <form>
-        <p>Willkommen bei StreamQuest!</p>
-    </form>
-{% endblock %}
+            <div class="guide-layout">
+                <aside class="guide-toc" aria-label="Table of contents">
+                    <h3>Inhalt</h3>
+                    <ol>
+                        <li><a href="#step-1">Account erstellen / Login</a></li>
+                        <li><a href="#step-2">Gruppe erstellen</a></li>
+                        <li><a href="#step-3">Challenges hinzufuegen</a></li>
+                        <li><a href="#step-4">Overlay in OBS nutzen</a></li>
+                        <li><a href="#step-5">Challenges abhaken</a></li>
+                    </ol>
+                </aside>
+
+                <div class="guide-steps">
+                    <article class="guide-card" id="step-1">
+                        <span class="guide-step">1</span>
+                        <div>
+                            <h3>Account erstellen / Login</h3>
+                            <p>Registrieren, anmelden und dein StreamQuest Profil setzen.</p>
+                        </div>
+                    </article>
+
+                    <article class="guide-card" id="step-2">
+                        <span class="guide-step">2</span>
+                        <div>
+                            <h3>Gruppe erstellen</h3>
+                            <p>Lege eine Gruppe an und teile den Invite mit deinen Viewern.</p>
+                        </div>
+                    </article>
+
+                    <article class="guide-card" id="step-3">
+                        <span class="guide-step">3</span>
+                        <div>
+                            <h3>Challenges hinzufügen</h3>
+                            <p>Wähl die passenden Challenges aus und setze die Schwierigkeit.</p>
+                        </div>
+                    </article>
+
+                    <article class="guide-card" id="step-4">
+                        <span class="guide-step">4</span>
+                        <div>
+                            <h3>Overlay in OBS nutzen</h3>
+                            <p>Füge das Overlay als Browser Source hinzu und positioniere es.</p>
+                        </div>
+                    </article>
+
+                    <article class="guide-card" id="step-5">
+                        <span class="guide-step">5</span>
+                        <div>
+                            <h3>Challenges abhaken</h3>
+                            <p>Nach dem Stream die erledigten Challenges abhaken und feiern.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <p>&copy; StreamQuest </p>
+    </footer>
+</body>
+</html>

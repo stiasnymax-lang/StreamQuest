@@ -15,8 +15,6 @@ app.teardown_appcontext(db.close_db_con)
 
 @app.route('/')
 def index():
-    form = forms.ProfileForm()
-    form.user_id.data = session['user_id']
     return render_template('index.html')
 
 @app.route('/overlay/<int:group_id>/')
@@ -77,10 +75,14 @@ def overlay(group_id):
 @app.route('/challenges/')
 def challenges():
     db_con = db.get_db_con()
+    #search functionality
+    c = request.args.get("c", "").strip().lower()
+
     challenges = db_con.execute(
-        "SELECT id, title, difficulty, game_name, time_needed FROM challenges ORDER BY title"
+        "SELECT id, title, difficulty, game_name, time_needed FROM challenges WHERE title LIKE ? ORDER BY title", (f"%{c}%",)
     ).fetchall()
-    return render_template('challenges.html', challenges=challenges)
+    return render_template('challenges.html', challenges=challenges, c=c)
+
 
 
 @app.route('/challenge/<int:challenge_id>/')

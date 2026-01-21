@@ -1,10 +1,74 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pricing.css') }}">
 
-{% block title %}Pricing{% endblock %}
+    </head>
 
-{% block content %}
-    <h2>Pricing</h2>
-    <form>
-        <p>Willkommen bei StreamQuest!</p>
-    </form>
-{% endblock %}
+<body>
+    <nav>
+        <a href="/">Home</a> |  
+        <a href="/groups">Gruppen</a> | 
+        <a href="/pricing">Pricing</a> | 
+        <a href="/login">Login</a> | 
+        <a href="/guide">Guide</a> | 
+        <a href="/profile">Profil</a> | 
+        <a href="/create_group">Gruppe erstellen</a> | 
+        <a href="/support">Support</a> |
+        <a href="/challenges">Challenges</a> |
+    </nav>
+ <section class="pricing-page">
+        <header class="pricing-header">
+            <p class="pricing-kicker">StreamQuest Plans</p>
+            <h2>Wähl das passende Paket für deinen Stream</h2>
+            <p class="pricing-sub">Einfach, transparent und für Creator gedacht.</p>
+        </header>
+
+        <div class="pricing-grid">
+            <article class="pricing-card">
+                <div class="pricing-title">
+                    <h3>Free</h3>
+                    <p class="pricing-price">0€</p>
+                </div>
+                <ul>
+                    <li>Basis-Overlay für Challenges</li>
+                    <li>1 aktive Gruppe</li>
+                    <li>Community-Templates</li>
+                </ul>
+                <button class="pricing-btn pricing-primary" type="button">Get started</button>
+            </article>
+
+            <article class="pricing-card pricing-featured">
+                <div class="pricing-title">
+                    <h3>Pro</h3>
+                    <p class="pricing-price">4,99€</p>
+                </div>
+                <ul>
+                    <li>Mehrere Gruppen parallel</li>
+                    <li>Erweiterte Stats</li>
+                    <li>Overlay-Presets</li>
+                </ul>
+                <button class="pricing-btn" type="button" disabled>Coming soon</button>
+            </article>
+
+            <article class="pricing-card">
+                <div class="pricing-title">
+                    <h3>Creator+</h3>
+                    <p class="pricing-price">9,99€</p>
+                </div>
+                <ul>
+                    <li>Team-Workspace</li>
+                    <li>Challenge-Queue Automation</li>
+                    <li>Premium Support</li>
+                </ul>
+                <button class="pricing-btn" type="button" disabled>Not available in prototype</button>
+            </article>
+        </div>
+    </section>
+    <footer>
+        <p>&copy; StreamQuest </p>
+    </footer>
+</body>
+
+</html>

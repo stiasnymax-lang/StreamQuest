@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Meine WebApp{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
     </head>
 <body>
     <nav>
@@ -25,9 +26,10 @@
         {% endblock %}
     </main>
 
-    <hr>
+</hr>
     <footer>
         <p>&copy; StreamQuest </p>
     </footer>
+
 </body>
 </html>

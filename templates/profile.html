@@ -1,16 +1,70 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 
-{% block title %}Profile{% endblock %}
+    </head>
 
-{% block content %}
-    <h2>Profile</h2>
+<body>
+    <nav>
+        <a href="/">Home</a> |  
+        <a href="/groups">Gruppen</a> | 
+        <a href="/pricing">Pricing</a> | 
+        <a href="/login">Login</a> | 
+        <a href="/guide">Guide</a> | 
+        <a href="/profile">Profil</a> | 
+        <a href="/create_group">Gruppe erstellen</a> | 
+        <a href="/support">Support</a> |
+        <a href="/challenges">Challenges</a> |
+    </nav>
+    <section class="profile-page">
+        <div class="profile-shell">
+            <header class="profile-hero">
+                <div class="profile-avatar" aria-hidden="true">pic</div>
+                <div class="profile-hero-text">
+                    <p class="profile-kicker">StreamQuest Profil</p>
+                    <h2 class="profile-name">{{ user.username }}</h2>
+                    <p class="profile-meta">User ID: {{ user.id }}</p>
+                </div>
+            </header>
+
+            <div class="profile-grid">
+                <section class="profile-card">
+                    <h3>Account</h3>
+                    <dl class="profile-list">
+                        <div>
+                            <dt>Username</dt>
+                            <dd>{{ user.username }}</dd>
+                        </div>
+                        <div>
+                            <dt>Email</dt>
+                            <dd>{{ user.email }}</dd>
+                        </div>
+                        <div>
+                                <dt>Abonnement</dt>
+                                <dd>{{ user.abonoment }}</dd>
+                            </div>
+                        </dl>
+                </section>
+
+                <section class="profile-card">
+                    <dl class="profile-stats">
+                        <div>
+                            <dt>Aktive Gruppe</dt>
+                            <dd>Raiders Alpha</dd>
+                        </div>
+                    </dl>
+                </section>
+            </div>
+        </div>
+    </section>
     <form>
-        <p>Willkommen bei StreamQuest!</p>
-        <p>User ID: {{ user.id }}</p>
-        <p>Username: {{ user.username }}</p>
-        <p>Email: {{ user.email }}</p>
-        <p>Abonnement: {{ user.abonoment }}</p>
         <button type="button" class="btn" onclick="location.href='{{ url_for('index') }}'">Abmelden</button>
         <button type="button" class="btn" onclick="location.href='{{ url_for('index') }}'">Account löschen</button>
     </form>
-{% endblock %}
+    <footer>
+        <p>&copy; StreamQuest </p>
+    </footer>
+</body>
+</html>

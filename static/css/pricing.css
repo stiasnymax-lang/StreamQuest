@@ -1,0 +1,126 @@
+nav {
+    background-color: #444;
+    padding: 0.5rem;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+}
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f4f4;
+}
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+}
+.pricing-page {
+    --pricing-ink: #141410;
+    --pricing-muted: #6b5f58;
+    --pricing-accent: #d85a2a;
+    --pricing-surface: #fff6ec;
+    font-family: "Palatino Linotype", "Book Antiqua", serif;
+    color: var(--pricing-ink);
+}
+
+.pricing-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.pricing-kicker {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.75rem;
+    color: var(--pricing-muted);
+}
+
+.pricing-sub {
+    color: var(--pricing-muted);
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.6rem;
+}
+
+.pricing-card {
+    position: relative;
+    padding: 1.8rem 1.6rem;
+    border-radius: 22px;
+    background: linear-gradient(160deg, #fff, #fef3e6);
+    box-shadow: 0 16px 40px rgba(20, 20, 16, 0.08);
+    display: grid;
+    gap: 1.2rem;
+    min-height: 320px;
+}
+
+.pricing-featured {
+    border: 2px solid rgba(216, 90, 42, 0.4);
+    background: linear-gradient(160deg, #fff1e4, #ffe7d6);
+}
+
+.pricing-title h3 {
+    margin-bottom: 0.4rem;
+    font-size: 1.2rem;
+}
+
+.pricing-price {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.pricing-card ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+}
+
+.pricing-card li {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+}
+
+.pricing-btn {
+    padding: 0.7rem 1.2rem;
+    border-radius: 999px;
+    border: 1px solid rgba(20, 20, 16, 0.2);
+    background: transparent;
+    color: var(--pricing-ink);
+    font-weight: 600;
+}
+
+.pricing-primary {
+    background: var(--pricing-accent);
+    color: #fff;
+    border-color: var(--pricing-accent);
+}
+
+.pricing-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 720px) {
+    .pricing-header {
+        text-align: left;
+    }
+}
