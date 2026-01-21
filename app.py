@@ -56,12 +56,11 @@ def overlay(group_id):
         ORDER BY gc.assigned_at DESC
     """, (group_id,)).fetchall()
 
-    if request.args.get("json") is not None:
+    if request.args.get("json") is not None: #Quelle unter https://medium.com/@PyGuyCharles/python-sql-to-json-and-beyond-3e3a36d32853 
         return jsonify({
             "group_name": group_row['name'],
             "active_challenge": dict(active_challenge) if active_challenge else None,
             "queued_challenges": [dict(ch) for ch in queued_challenges],
-            "done_challenges": [dict(ch) for ch in done_challenges]
         })
     else:
         return render_template(
@@ -400,9 +399,6 @@ def group(group_id):
                 db_con.commit()
                 flash('Session has been started', 'success')
 
-            if request.args.get("json") is not None:
-                return jsonify({"status": "success"})
-            else:
                 return redirect(url_for('group', group_id=group_id))
 
 # -------- Create Group ---------

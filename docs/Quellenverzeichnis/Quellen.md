@@ -1,0 +1,16 @@
+# Quellen
+
+## app.py Zeile 59-64
+
+Wie kann man in python SQL zu JSON um RESTful API zu gestalten und dict comprhensions nutzen
+
+Author
+: 
+Charles Stauffer
+Date
+:
+September 2017
+Link
+:
+https://medium.com/@PyGuyCharles/python-sql-to-json-and-beyond-3e3a36d32853
+

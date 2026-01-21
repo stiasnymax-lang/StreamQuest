@@ -12,21 +12,9 @@ Speichert alle registrierten Nutzer, die sich in StreamQuest anmelden können.
 |--------------|------------|--------------------------------------------|
 | `id`         | INTEGER PK | Eindeutige ID des Nutzers                  |
 | `username`   | TEXT       | Anzeigename im System                      |
-| `email`      | TEXT       | E-Mail-Adresse des Nutzers                 |
 | `password`   | TEXT       | Passwort-Hash für den Login                |
-| `created_at` | TEXT       | Zeitpunkt der Registrierung (ISO-String)   |
-
-
-### `groups`
-
-Repräsentiert eine StreamQuest-Gruppe, z. B. eine Community oder ein Team, für das Challenges erstellt werden.
-
-| Feld         | Typ        | Beschreibung                               |
-|--------------|------------|--------------------------------------------|
-| `id`         | INTEGER PK | Eindeutige ID der Gruppe                   |
-| `name`       | TEXT       | Name der Gruppe                            |
-| `owner_id`   | INTEGER FK | Verweis auf `users.id` (Ersteller der Gruppe) |
-| `created_at` | TEXT       | Erstellungszeitpunkt der Gruppe            |
+| `email`      | TEXT       | E-Mail-Adresse des Nutzers                 |
+| `abonoment`  | INTEGER    | Welche Stufe das Abo vom User ist          |
 
 
 ### `challenges`
@@ -36,13 +24,53 @@ Speichert alle Challenges, die einer Gruppe zugeordnet sind und später im Overl
 | Feld          | Typ        | Beschreibung                                        |
 |---------------|------------|-----------------------------------------------------|
 | `id`          | INTEGER PK | Eindeutige ID der Challenge                         |
-| `group_id`    | INTEGER FK | Verweis auf `groups.id` (zugehörige Gruppe)         |
 | `title`       | TEXT       | Kurzer Titel der Challenge                          |
 | `description` | TEXT       | Optionale Detailbeschreibung                        |
-| `category`    | TEXT       | Kategorie (z. B. Gaming, Chat, IRL)                 |
 | `difficulty`  | TEXT       | Schwierigkeitsgrad (z. B. Easy, Medium, Hard)       |
-| `status`      | TEXT       | Status der Challenge (z. B. `open`, `done`, `skip`) |
+| `game_name`   | TEXT       | In Welchen Game Genre oder expliziten               |
+| `time_needed` | INTEGER    | Wert für wie lange die Aufgabe dauert durchschn.    |
 
+
+### `groups`
+
+Repräsentiert eine StreamQuest-Gruppe, z. B. eine Community oder ein Team, für das Challenges erstellt werden.
+
+| Feld         | Typ        | Beschreibung                                   |
+|--------------|------------|------------------------------------------------|
+| `id`         | INTEGER PK | Eindeutige ID der Gruppe                       |
+| `name`       | TEXT       | Name der Gruppe                                |
+| `password`   | TEXT       | Password des Users für Login u. Register       |
+| `owner_id`   | INTEGER FK | Verweis auf `user.id` (Ersteller der Gruppe)   |
+| `session_start` | TEXT    | Zeitpunkt wo Session gestartet wird            |
+
+
+### `group_members`
+
+Speichert alle User, die einer Gruppe zugeordnet sind und wer Owner ist.
+
+| Feld          | Typ        | Beschreibung                                        |
+|---------------|------------|-----------------------------------------------------|
+| `owner_id`    | INTEGER FK | Verweis auf `user.id` (Ersteller der Gruppe)        |
+| `user_id`     | INTEGER FK | Verweis auf `user.id` (zugehörige Gruppe)           |
+| `group_id`    | INTEGER FK | Verweis auf `groups.id` (zugehörige Gruppe)         |
+
+Primary keys sind `user_id` und `group_id`
+
+
+### `group_challenges`
+
+Speichert alle Challenges, die einer Gruppe zugeordnet sind und später im Overlay angezeigt werden können.
+
+| Feld          | Typ        | Beschreibung                                            |
+|---------------|------------|---------------------------------------------------------|
+| `group_id`    | INTEGER FK | Verweis auf `groups.id` (zugehörige Gruppe)             |
+| `challenge_id`| INTEGER FK | Verweis auf `challenger.id` (zugehörige Gruppe)         |
+| `status`      | TEXT       | Status der Challenge (z. B. `active`, `done`, `queued`) |
+| `assigned_at` | DATETIME   |         |
+| `startet_at`  | DATETIME   |         |
+| `finished_at` | DATETIME   |         |
+
+Primary keys sind `group_id` und `challenge_id`
 
 ## Beziehungen
 
@@ -51,4 +79,4 @@ Speichert alle Challenges, die einer Gruppe zugeordnet sind und später im Overl
 - Eine **Group** kann mehrere **Challenges** enthalten (`groups 1:n challenges`).
 - Jede **Challenge** ist genau einer **Group** zugeordnet und kann im Overlay dieser Gruppe angezeigt werden.
 
-Dieses Datenmodell zeigt den aktuellen Stand der Anwendung (Login, Gruppen, Challenges inkl. Overlay) und bietet eine Basis, auf der später zusätzliche Features hinzugefügt werden können.
+Dieses Datenmodell zeigt den aktuellen Stand der Anwendung und bietet eine Basis, auf der später zusätzliche Features hinzugefügt werden können.
