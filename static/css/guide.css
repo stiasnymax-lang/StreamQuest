@@ -27,6 +27,18 @@ body {
     font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     color: var(--guide-ink);
 }
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-right: 1rem;
+    padding: 0.5rem;
+}
+
+nav a:hover {
+    background-color: #555;
+    border-radius: 4px;
+}
+
 footer {
     background-color: #333;
     color: #fff;
