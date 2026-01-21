@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, redirect, session, url_for, request, abort, flash
+from flask import Flask, render_template, redirect, session, url_for, request, abort, flash, jsonify
 import db, forms
 
 app = Flask(__name__)
@@ -56,13 +56,22 @@ def overlay(group_id):
         ORDER BY gc.assigned_at DESC
     """, (group_id,)).fetchall()
 
-    return render_template(
-        'overlay.html',
-        group_name=group_row['name'],
-        active_challenge=active_challenge,
-        queued_challenges=queued_challenges,
-        done_challenges=done_challenges
-        )
+    if request.args.get("json") is not None:
+        return jsonify({
+            "group_name": group_row['name'],
+            "active_challenge": dict(active_challenge) if active_challenge else None,
+            "queued_challenges": [dict(ch) for ch in queued_challenges],
+            "done_challenges": [dict(ch) for ch in done_challenges]
+        })
+    else:
+        return render_template(
+            'overlay.html',
+            group_name=group_row['name'],
+            active_challenge=active_challenge,
+            queued_challenges=queued_challenges,
+            done_challenges=done_challenges,
+            group_id=group_id
+            )
 
 # -------- Challenges --------
 
@@ -330,7 +339,8 @@ def group(group_id):
             challenges=challenges,
             q=q,
             form=form,
-            group_challenges=group_challenges
+            group_challenges=group_challenges,
+            group_id=group_id
         )
     else: #request.method == 'POST'
         
@@ -390,9 +400,10 @@ def group(group_id):
                 db_con.commit()
                 flash('Session has been started', 'success')
 
-            return redirect(url_for('group', group_id=group_id))
-
-
+            if request.args.get("json") is not None:
+                return jsonify({"status": "success"})
+            else:
+                return redirect(url_for('group', group_id=group_id))
 
 # -------- Create Group ---------
 

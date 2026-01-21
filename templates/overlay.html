@@ -2,32 +2,146 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Overlay {{ group_name }} {% endblock %}</title>
+    <title>Overlay</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='overlay.css') }}">
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
 
-<body>
-    {% if active_challenge %}
-        <h1>Aktive Challenge</h1>
-        <li><strong>{{ active_challenge.title }}</strong></li>
-        <p>{{ active_challenge.description }}</p>
-    {% else %}
-        <p>Gerade keine aktive Challenge</p>
-    {% endif %}
+    <body>
+    <header>
+        <h1 id="groupTitle">Overlay</h1>
+    </header>
 
-    <h2>Restliche Challenges</h2>
-    {% if queued_challenges %}
+    <main>
+        <section id="activeSection">
+        <h2>Aktive Challenge</h2>
+        <div id="activeContainer">
+            <p>lade…</p>
+        </div>
+        </section>
 
-        <ul>
-            {% for ch in queued_challenges %}
-            <li>{{ ch.title }} ({{ ch.status }})</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+        <section id="queuedSection">
+        <h2>Restliche Challenges</h2>
+        <ul id="queuedList"></ul>
+        <p id="queuedEmpty" style="display:none;">Keine weiteren Challenges in der Queue.</p>
+        </section>
 
-    </ul>
+        <section id="doneSection" style="display:none;">
+        <h2>Erledigte Challenges</h2>
+        <ul id="doneList"></ul>
+        <p id="doneEmpty" style="display:none;">Noch keine erledigten Challenges.</p>
+        </section>
+    </main>
+
     <footer>
-        <p>&copy; StreamQuest </p>
+        <p>&copy; StreamQuest</p>
     </footer>
+
+    <script>
+        // group_id wird serverseitig nur als Zahl eingesetzt
+        const GROUP_ID = {{ group_id|int }};
+        const JSON_URL = `/overlay/${GROUP_ID}/?json=1`;
+
+        const els = {
+        groupTitle: document.getElementById('groupTitle'),
+
+        activeContainer: document.getElementById('activeContainer'),
+
+        queuedList: document.getElementById('queuedList'),
+        queuedEmpty: document.getElementById('queuedEmpty'),
+
+
+        };
+
+        // Letzten Zustand merken, um nur Änderungen zu patchen
+        let lastStateJson = null;
+
+        function escapeHtml(s) {
+        return String(s ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
+        }
+
+        function renderActive(active) {
+        if (!active) {
+            els.activeContainer.innerHTML = `<p>Gerade keine aktive Challenge</p>`;
+            return;
+        }
+        const title = escapeHtml(active.title);
+        const desc = escapeHtml(active.description);
+        els.activeContainer.innerHTML = `
+            <div class="active-challenge">
+            <div class="active-title"><strong>${title}</strong></div>
+            <div class="active-desc">${desc}</div>
+            </div>
+        `;
+        }
+
+        function renderList(listEl, emptyEl, items, formatter) {
+        if (!items || items.length === 0) {
+            listEl.innerHTML = '';
+            emptyEl.style.display = 'block';
+            return;
+        }
+        emptyEl.style.display = 'none';
+        listEl.innerHTML = items.map(formatter).join('');
+        }
+
+        function liChallenge(ch) {
+        const title = escapeHtml(ch.title);
+        const status = escapeHtml(ch.status);
+        return `<li>${title} (${status})</li>`;
+        }
+
+        function patchDom(data) {
+        // Titel + Gruppenname
+        const groupName = data.group_name ? `Overlay – ${data.group_name}` : 'Overlay';
+        if (els.groupTitle.textContent !== groupName) {
+            els.groupTitle.textContent = groupName;
+            document.title = groupName;
+        }
+
+        // Active
+        renderActive(data.active_challenge);
+
+        // Queued
+        renderList(els.queuedList, els.queuedEmpty, data.queued_challenges, liChallenge);
+
+        // Done (optional anzeigen)
+        const hasDone = (data.done_challenges && data.done_challenges.length > 0);
+        els.doneSection.style.display = hasDone ? 'block' : 'none';
+        renderList(els.doneList, els.doneEmpty, data.done_challenges, liChallenge);
+        }
+
+        async function fetchJson() {
+        const res = await fetch(JSON_URL, { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+        }
+
+        async function tick() {
+        try {
+            const data = await fetchJson();
+            const current = JSON.stringify(data);
+
+            // Nur patchen, wenn sich etwas geändert hat
+            if (current !== lastStateJson) {
+            patchDom(data);
+            lastStateJson = current;
+            }
+        } catch (err) {
+            // Bei Fehler nicht alles leeren, nur Hinweis setzen
+            els.activeContainer.innerHTML = `<p>Overlay offline / Fehler beim Laden</p>`;
+            console.error(err);
+        }
+        }
+
+        // Polling-Intervall (2s ist fürs Streaming meist okay)
+        tick();
+        setInterval(tick, 2000);
+    </script>
 </body>
 </html>
