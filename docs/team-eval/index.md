@@ -5,6 +5,7 @@ nav_order: 5
 ---
 
 {: .label }
-[Jane Dane]
+[Max Stiasny]
+[Lukas Hoppert]
 
 # Team evaluation

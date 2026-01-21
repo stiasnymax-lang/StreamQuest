@@ -5,7 +5,8 @@ nav_order: 1
 ---
 
 {: .label }
-[Jane Dane]
+[Max Stiasny]
+[Lukas Hoppert]
 
 {: .no_toc }
 # Architecture

@@ -13,19 +13,13 @@ Streamer erhalten mit nur einem Klick eine zufällige Sammlung von Aufgaben, die
 
 ### Max Stiasny
 
-About
-: Some info about Max
-
 Matr.-Nr.
 : 77201477294
 
-### Lukas
-
-About
-: Some info about Joe
+### Lukas Hoppert
 
 Matr.-Nr.
-: 1234567
+: 77208871709
 
 ## Eidesstattliche Erklärung
 

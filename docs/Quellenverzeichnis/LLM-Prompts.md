@@ -1,7 +1,7 @@
 # LLM-Prompts
 
 ### Overlay.html 
-## erstellt mit Chat-GPT
+erstellt mit Chat-GPT
 
 Damit das Overlay korrekt funktioniert, müssen die benötigten Daten per JSON übergeben werden.
 Die Datei overlay.html selbst sowie ihre DOM-Elemente können nicht direkt über einen HTTP-PUT-Request aktualisiert werden.
