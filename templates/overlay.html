@@ -28,8 +28,10 @@
     </main>
 
 <script>
-        
+    //Gruppen-ID aus Jinja
     const GROUP_ID = {{ group_id|int }};
+
+    //JSON-URL zusammenbauen
     const URL = `/overlay/${GROUP_ID}/?json=1`;
 
     //HTML-Elemente holen (DOM)
