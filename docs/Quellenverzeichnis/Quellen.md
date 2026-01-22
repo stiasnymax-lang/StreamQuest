@@ -20,3 +20,6 @@ Link
 :
 https://medium.com/@PyGuyCharles/python-sql-to-json-and-beyond-3e3a36d32853
 
+### overlay.html
+
+https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/meta/http-equiv
