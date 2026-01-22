@@ -52,7 +52,20 @@
                     <dl class="profile-stats">
                         <div>
                             <dt>Aktive Gruppe</dt>
-                            <dd>Raiders Alpha</dd>
+                            <dd>        
+
+                                {% if user_groups %}
+                                <ul>
+                                    {% for g in user_groups %}
+                                    <li>
+                                        <a href="{{ url_for('group', group_id=g.id) }}">{{ g.name }}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                {% else %}
+                                    <p>Du bist aktuell in keiner Gruppe.</p>
+                                {% endif %}
+                            </dd>
                         </div>
                     </dl>
                 </section>

@@ -194,7 +194,15 @@ def profile():
         (user_id,)
     ).fetchone()
 
-    return render_template('profile.html', user=user)
+    user_groups = db_con.execute("""
+        SELECT groups.id, groups.name
+        FROM groups
+        JOIN group_members gm ON gm.group_id = groups.id 
+        WHERE gm.user_id = ?
+        ORDER BY groups.name
+    """, (user_id,)).fetchall()
+
+    return render_template('profile.html', user=user, user_groups=user_groups)
 
 
 # -------- Groups --------
