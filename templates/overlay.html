@@ -32,11 +32,10 @@
         const GROUP_ID = {{ group_id|int }};
         const JSON_URL = `/overlay/${GROUP_ID}/?json=1`;
 
+        // DOM-Elemente cachen
         const els = {
         groupTitle: document.getElementById('groupTitle'),
-
         activeContainer: document.getElementById('activeContainer'),
-
         queuedList: document.getElementById('queuedList'),
         queuedEmpty: document.getElementById('queuedEmpty'),
         };
@@ -44,6 +43,7 @@
         // Letzten Zustand merken, um nur Änderungen zu patchen
         let lastStateJson = null;
 
+        //HTML escapen (gegen XSS)
         function escapeHtml(s) {
         return String(s ?? '')
             .replaceAll('&', '&amp;')
@@ -53,6 +53,7 @@
             .replaceAll("'", '&#039;');
         }
 
+        //“Active Challenge” rendern
         function renderActive(active) {
         if (!active) {
             els.activeContainer.innerHTML = `<p>Gerade keine aktive Challenge</p>`;
@@ -68,6 +69,7 @@
         `;
         }
 
+        //Liste rendern (Queue-Liste)
         function renderList(listEl, emptyEl, items, formatter) {
         if (!items || items.length === 0) {
             listEl.innerHTML = '';
@@ -78,14 +80,15 @@
         listEl.innerHTML = items.map(formatter).join('');
         }
 
+        //Formatierer für ein Listenelement
         function liChallenge(ch) {
         const title = escapeHtml(ch.title);
         const status = escapeHtml(ch.status);
         return `<li>${title} (${status})</li>`;
         }
 
+        //DOM “patchen” mit neuen Daten
         function patchDom(data) {
-        // Titel + Gruppenname
         const groupName = data.group_name ? `Overlay – ${data.group_name}` : 'Overlay';
         if (els.groupTitle.textContent !== groupName) {
             els.groupTitle.textContent = groupName;
@@ -97,12 +100,14 @@
         renderList(els.queuedList, els.queuedEmpty, data.queued_challenges, liChallenge);
         }
 
+        //JSON vom Server holen
         async function fetchJson() {
         const res = await fetch(JSON_URL, { cache: 'no-store' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return await res.json();
         }
 
+        //Ein “Tick”: holen, vergleichen, ggf. rendern
         async function tick() {
         try {
             const data = await fetchJson();
