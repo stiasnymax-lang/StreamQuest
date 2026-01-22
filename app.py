@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, redirect, session, url_for, request, abort, flash, jsonify
 import db, forms
-from functions import logincheck
+from functions import login_required
 
 
 app = Flask(__name__)
@@ -20,8 +20,8 @@ def index():
     return render_template('index.html')
 
 @app.route('/overlay/<int:group_id>/')
+@login_required
 def overlay(group_id):
-    logincheck()
 
     db_con = db.get_db_con()
     group_row = db_con.execute(
@@ -183,8 +183,8 @@ def register():
 # -------- Profile --------
 
 @app.route('/profile/')
+@login_required
 def profile():
-    logincheck()
 
     db_con = db.get_db_con()
     user_id = session['user_id']
@@ -226,8 +226,8 @@ def groups():
     return render_template('groups.html', groups=groups, g=g)
 
 @app.route('/join/<int:group_id>/')
+@login_required
 def join_group(group_id):
-    logincheck()
     db_con = db.get_db_con()
     form = forms.JoinGroupForm()
     user_id = session['user_id']
@@ -270,8 +270,8 @@ def join_group(group_id):
         return render_template('join_group.html', form=form, group=group_row)
 
 @app.route('/group/<int:group_id>/', methods=["GET", "POST"])
+@login_required
 def group(group_id):
-    logincheck()
     
     db_con = db.get_db_con()
     user_id = session['user_id']
@@ -423,9 +423,8 @@ def group(group_id):
 # -------- Create Group ---------
 
 @app.route('/create_group/', methods=['GET', 'POST'])
+@login_required
 def create_group():
-
-    logincheck()
     
     db_con = db.get_db_con()
     form = forms.CreateGroupForm()
