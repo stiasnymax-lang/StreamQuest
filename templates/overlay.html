@@ -27,107 +27,68 @@
         </section>
     </main>
 
-    <script>
-        // group_id wird serverseitig nur als Zahl eingesetzt
-        const GROUP_ID = {{ group_id|int }};
-        const JSON_URL = `/overlay/${GROUP_ID}/?json=1`;
+<script>
+        
+    const GROUP_ID = {{ group_id|int }};
+    const URL = `/overlay/${GROUP_ID}/?json=1`;
 
-        // DOM-Elemente cachen
-        const els = {
-        groupTitle: document.getElementById('groupTitle'),
-        activeContainer: document.getElementById('activeContainer'),
-        queuedList: document.getElementById('queuedList'),
-        queuedEmpty: document.getElementById('queuedEmpty'),
-        };
+    //HTML-Elemente holen (DOM)
+    const titleEl = document.getElementById('groupTitle');
+    const activeEl = document.getElementById('activeContainer');
+    const queueEl = document.getElementById('queuedList');
+    const emptyEl = document.getElementById('queuedEmpty');
 
-        // Letzten Zustand merken, um nur Änderungen zu patchen
-        let lastStateJson = null;
+    //escape
+    function escapeHtml(text) {
+        return String(text ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;');
+    }
 
-        //HTML escapen (gegen XSS)
-        function escapeHtml(s) {
-        return String(s ?? '')
-            .replaceAll('&', '&amp;')
-            .replaceAll('<', '&lt;')
-            .replaceAll('>', '&gt;')
-            .replaceAll('"', '&quot;')
-            .replaceAll("'", '&#039;');
-        }
-
-        //“Active Challenge” rendern
-        function renderActive(active) {
-        if (!active) {
-            els.activeContainer.innerHTML = `<p>Gerade keine aktive Challenge</p>`;
-            return;
-        }
-        const title = escapeHtml(active.title);
-        const desc = escapeHtml(active.description);
-        els.activeContainer.innerHTML = `
-            <div class="active-challenge">
-            <div class="active-title"><strong>${title}</strong></div>
-            <div class="active-desc">${desc}</div>
-            </div>
-        `;
-        }
-
-        //Liste rendern (Queue-Liste)
-        function renderList(listEl, emptyEl, items, formatter) {
-        if (!items || items.length === 0) {
-            listEl.innerHTML = '';
-            emptyEl.style.display = 'block';
-            return;
-        }
-        emptyEl.style.display = 'none';
-        listEl.innerHTML = items.map(formatter).join('');
-        }
-
-        //Formatierer für ein Listenelement
-        function liChallenge(ch) {
-        const title = escapeHtml(ch.title);
-        const status = escapeHtml(ch.status);
-        return `<li>${title} (${status})</li>`;
-        }
-
-        //DOM “patchen” mit neuen Daten
-        function patchDom(data) {
-        const groupName = data.group_name ? `Overlay – ${data.group_name}` : 'Overlay';
-        if (els.groupTitle.textContent !== groupName) {
-            els.groupTitle.textContent = groupName;
-            document.title = groupName;
-        }
-        // Active
-        renderActive(data.active_challenge);
-        // Queued
-        renderList(els.queuedList, els.queuedEmpty, data.queued_challenges, liChallenge);
-        }
-
-        //JSON vom Server holen
-        async function fetchJson() {
-        const res = await fetch(JSON_URL, { cache: 'no-store' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return await res.json();
-        }
-
-        //Ein “Tick”: holen, vergleichen, ggf. rendern
-        async function tick() {
+    //Daten holen und Overlay updaten
+    async function updateOverlay() {
         try {
-            const data = await fetchJson();
-            const current = JSON.stringify(data);
+        const response = await fetch(URL, { cache: 'no-store' });
+        const data = await response.json();
 
-            // Nur patchen, wenn sich etwas geändert hat
-            if (current !== lastStateJson) {
-            patchDom(data);
-            lastStateJson = current;
+        // Titel
+        const title = data.group_name
+            ? `Overlay – ${data.group_name}`
+            : 'Overlay';
+        titleEl.textContent = title;
+        document.title = title;
+
+        // Active Challenge
+        if (!data.active_challenge) {
+            activeEl.innerHTML = `<p>Gerade keine aktive Challenge</p>`;
+        } else {
+            activeEl.innerHTML = `
+            <h3>${escapeHtml(data.active_challenge.title)}</h3>
+            <p>${escapeHtml(data.active_challenge.description)}</p>
+            `;
+        }
+
+        // Queue
+        queueEl.innerHTML = '';
+        if (!data.queued_challenges || data.queued_challenges.length === 0) {
+            emptyEl.style.display = 'block';
+        } else {
+            emptyEl.style.display = 'none';
+            for (const ch of data.queued_challenges) {
+            queueEl.innerHTML += `<li>${escapeHtml(ch.title)}</li>`;
             }
-        } catch (err) {
-            // Bei Fehler nicht alles leeren, nur Hinweis setzen
-            els.activeContainer.innerHTML = `<p>Overlay offline / Fehler beim Laden</p>`;
-            console.error(err);
-        }
         }
 
-        // Polling-Intervall (2s ist fürs Streaming meist okay)
-        tick();
-        setInterval(tick, 2000);
-    </script>
+        } catch (err) {
+        activeEl.innerHTML = `<p>Fehler beim Laden</p>`;
+        console.error(err);
+        }
+    }
+
+    updateOverlay();
+    //Polling 2 Sekunden
+    setInterval(updateOverlay, 2000);
+</script>
 </body>
 </html>
