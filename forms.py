@@ -8,8 +8,6 @@ class CreateGroupForm(FlaskForm):
     user_id = HiddenField()
     submit = SubmitField('Create')
 
-# class ProfileForm(FlaskForm):
-# class PricingForm(FlaskForm):
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4, max=20)])
     password = PasswordField(validators=[InputRequired(), Length(min=3, max=20)])
@@ -46,3 +44,6 @@ class ChallengeForm(FlaskForm):
 
 class GroupsSearchForm(FlaskForm):
     submit = SubmitField('Search') #fehlt
+    
+# class ProfileForm(FlaskForm):
+# class PricingForm(FlaskForm):
