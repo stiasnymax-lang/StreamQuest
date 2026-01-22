@@ -55,11 +55,12 @@
         const data = await response.json();
 
         // Titel
-        const title = data.group_name
-            ? `Overlay – ${data.group_name}`
-            : 'Overlay';
-        titleEl.textContent = title;
-        document.title = title;
+        let title;
+        if (data.group_name) {
+        title = `Overlay – ${data.group_name}`;
+        } else {
+        title = 'Overlay';
+        }
 
         // Active Challenge anzeigen
         if (!data.active_challenge) {
