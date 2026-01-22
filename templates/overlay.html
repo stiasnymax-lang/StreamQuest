@@ -31,7 +31,7 @@
     <section id="queuedSection">
       <h2>Restliche Challenges</h2>
 
-      {% if queued_challenges and queued_challenges|length > 0 %}
+      {% if queued_challenges %}
         <ul id="queuedList">
           {% for ch in queued_challenges %}
             <li>{{ ch.title }}</li>
