@@ -61,7 +61,7 @@
         titleEl.textContent = title;
         document.title = title;
 
-        // Active Challenge
+        // Active Challenge anzeigen
         if (!data.active_challenge) {
             activeEl.innerHTML = `<p>Gerade keine aktive Challenge</p>`;
         } else {
@@ -71,7 +71,7 @@
             `;
         }
 
-        // Queue
+        // Queued Challenges anzeigen
         queueEl.innerHTML = '';
         if (!data.queued_challenges || data.queued_challenges.length === 0) {
             emptyEl.style.display = 'block';
