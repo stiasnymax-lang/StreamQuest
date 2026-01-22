@@ -61,22 +61,16 @@ footer {
     overflow: hidden;
 }
 
-
-
-
-
 .profile-hero {
     grid-template-columns: auto 1fr auto;
     gap: 1.5rem;
     align-items: center;
     margin-bottom: 2rem;
-    z-index: 1;
     display: flex;
     justify-content: center; 
     align-items: center;     
     text-align: center;      
 }
-
 
 .profile-hero-text {
     display: grid;
