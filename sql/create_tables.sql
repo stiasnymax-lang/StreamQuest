@@ -23,8 +23,7 @@ CREATE TABLE groups (
     password TEXT NOT NULL,
     owner_id INTEGER,
     session_start DATETIME,
-    FOREIGN KEY (owner_id) REFERENCES users(id),
-    PRIMARY KEY (id)
+    FOREIGN KEY (owner_id) REFERENCES users(id)
 );
 
 CREATE TABLE group_members (
