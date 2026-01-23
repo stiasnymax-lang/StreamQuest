@@ -45,5 +45,8 @@ class ChallengeForm(FlaskForm):
 class GroupsSearchForm(FlaskForm):
     submit = SubmitField('Search') #fehlt
     
-# class ProfileForm(FlaskForm):
-# class PricingForm(FlaskForm):
+class ProfileForm(FlaskForm):
+    delete = SubmitField('Search') #fehlt
+    abmelden = SubmitField('Search') #fehlt
+
+# class PricingForm(FlaskForm): weglassen?
