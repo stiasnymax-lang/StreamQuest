@@ -24,6 +24,19 @@ def index():
 def overlay(group_id):
 
     db_con = db.get_db_con()
+    user_id = session['user_id']
+    
+    is_member = db_con.execute(
+    "SELECT 1 FROM group_members WHERE user_id = ? AND group_id = ?",
+    (user_id, group_id)
+    ).fetchone()
+    
+    if is_member:
+        is_member = True
+    else: 
+        is_member = False
+        return redirect(url_for('join_group', group_id=group_id))
+                        
     group_row = db_con.execute(
         "SELECT id, name FROM groups WHERE id = ?",
         (group_id,)
@@ -202,7 +215,10 @@ def profile():
         ORDER BY groups.name
     """, (user_id,)).fetchall()
 
-    return render_template('profile.html', user=user, user_groups=user_groups)
+    if request.method == 'GET':
+        return render_template('profile.html', user=user, user_groups=user_groups)
+    else :  # POST
+        pass  # Für zukünftige Profil-Updates Lukas könnte machen
 
 
 # -------- Groups --------
@@ -277,11 +293,18 @@ def group(group_id):
     user_id = session['user_id']
     form = forms.GroupForm()
     
-    # Prüfe, ob User Mitglied oder Owner ist
+    # Prüfe, ob User Mitglied ist
     is_member = db_con.execute(
         "SELECT 1 FROM group_members WHERE user_id = ? AND group_id = ?",
         (user_id, group_id)
     ).fetchone()
+    
+    if is_member:
+        is_member = True
+    else: 
+        is_member = False
+        return redirect(url_for('join_group', group_id=group_id))
+        
 
     group_row = db_con.execute(
         "SELECT id, owner_id, name FROM groups WHERE id = ?",
