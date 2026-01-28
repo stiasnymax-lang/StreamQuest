@@ -1,49 +1,49 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>{{ group_name }}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/overlay.css') }}">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>{{ group_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/overlay.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Auto-Refresh alle 0.5 Sekunden -->
-   <!--https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/meta/http-equiv-->
-  <meta http-equiv="refresh" content="0.5">
+    <!-- Auto-Refresh alle 0.5 Sekunden -->
+    <!--https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/meta/http-equiv-->
+    <meta http-equiv="refresh" content="0.5">
 </head>
 
 <body>
-  <header>
-    <h1 id="groupTitle">{{ group_name }}</h1>
-  </header>
+    <header>
+        <h1 id="groupTitle">{{ group_name }}</h1>
+    </header>
 
-  <main>
-    <section id="activeSection">
-      <h2>Aktive Challenge</h2>
-      <div id="activeContainer">
-        {% if not active_challenge %}
-          <p>Gerade keine aktive Challenge</p>
-        {% else %}
-          <h3>{{ active_challenge.title }}</h3>
-          <p>{{ active_challenge.description }}</p>
-        {% endif %}
-      </div>
+    <main>
+        <section id="activeSection">
+        <h2>Aktive Challenge</h2>
+        <div id="activeContainer">
+            {% if not active_challenge %}
+            <p>Gerade keine aktive Challenge</p>
+            {% else %}
+            <h3>{{ active_challenge.title }}</h3>
+            <p>{{ active_challenge.description }}</p>
+            {% endif %}
+        </div>
     </section>
 
     <section id="queuedSection">
-      <h2>Restliche Challenges</h2>
+        <h2>Restliche Challenges</h2>
 
-      {% if queued_challenges %}
-        <ul id="queuedList">
-          {% for ch in queued_challenges %}
-            <li>{{ ch.title }}</li>
-          {% endfor %}
-        </ul>
-        <p id="queuedEmpty" style="display:none;">Keine weiteren Challenges in der Queue.</p>
-      {% else %}
-        <ul id="queuedList"></ul>
-        <p id="queuedEmpty">Keine weiteren Challenges in der Queue.</p>
-      {% endif %}
-    </section>
-  </main>
+        {% if queued_challenges %}
+            <ul id="queuedList">
+            {% for ch in queued_challenges %}
+                <li>{{ ch.title }}</li>
+            {% endfor %}
+            </ul>
+            <p id="queuedEmpty" style="display:none;">Keine weiteren Challenges in der Queue.</p>
+        {% else %}
+            <ul id="queuedList"></ul>
+            <p id="queuedEmpty">Keine weiteren Challenges in der Queue.</p>
+        {% endif %}
+        </section>
+    </main>
 </body>
 </html>
