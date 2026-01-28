@@ -22,15 +22,17 @@ nav_order: 3
 
 ### My observation (Wahrnehmung)
 
-[A specific observation, regarding know-how, effectiveness, team work or from another relevant area]
+Der Beitrag dieses Teammitglieds zum Projekterfolg blieb hinter den Erwartungen zurück, bietet jedoch Ansatzpunkte für eine aktivere Einbindung in zukünftigen Projekten. 
 
 ### Effect on me (Wirkung)
 
-[What positive or negative effect did this observation have on the reviewer?]
+- Viele Aufgaben übernehmen und somit weniger Zeit für das gesamt Projekt
+- Gesamt Ergebnis leidet darunter
 
 ### Tip for the future (Wunsch)
 
-[What should be changed or strengthened for the point of view of the reviewer?]
+- Versuchen Teammitglieder mehr einzubinden und zu motivieren
+- Selbstinitiative 
 
 ## [Lukas Hoppart] - review
 
