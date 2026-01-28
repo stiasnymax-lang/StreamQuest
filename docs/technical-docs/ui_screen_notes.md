@@ -1,4 +1,11 @@
-# StreamQuest – UI Screens Documentation
+---
+title: Design decisions
+parent: Technical Docs
+nav_order: 4
+---
+
+
+# Design decisions
 
 ## Designentscheidungen 
 
