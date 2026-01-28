@@ -69,6 +69,14 @@ def overlay(group_id):
         ORDER BY gc.assigned_at DESC
     """, (group_id,)).fetchall()
 
+    done_count = len(done_challenges)
+    queued_count = len(queued_challenges)
+    active_count = 1 if active_challenge else 0
+
+    total_count = done_count + queued_count + active_count
+    progress_percent = int(round((done_count / total_count) * 100)) if total_count > 0 else 0
+
+
     if request.args.get("json") is not None: #Quelle unter https://medium.com/@PyGuyCharles/python-sql-to-json-and-beyond-3e3a36d32853 
         return jsonify({
             "group_name": group_row['name'],
@@ -82,7 +90,10 @@ def overlay(group_id):
             active_challenge=active_challenge,
             queued_challenges=queued_challenges,
             done_challenges=done_challenges,
-            group_id=group_id
+            group_id=group_id,
+            done_count=done_count,
+            total_count=total_count,
+            progress_percent=progress_percent
             )
 
 # -------- Challenges --------

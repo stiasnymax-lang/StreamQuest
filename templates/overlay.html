@@ -28,6 +28,24 @@
             {% endif %}
         </div>
     </section>
+<section id="progressSection">
+    
+    <h2>Gruppenfortschritt</h2>
+
+    {% if total_count == 0 %}
+        <p>Noch keine Challenges in dieser Gruppe.</p>
+    {% else %}
+        <div class="progress-wrapper">
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: {{ progress_percent }}%;"></div>
+        </div>
+        <div class="progress-meta">
+            <span>{{ done_count }} / {{ total_count }} erledigt</span>
+            <span>{{ progress_percent }}%</span>
+        </div>
+        </div>
+    {% endif %}
+    </section>
 
     <section id="queuedSection">
         <h2>Restliche Challenges</h2>
