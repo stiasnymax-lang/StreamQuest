@@ -13,7 +13,7 @@ nav_order: 4
 
 <details open markdown="block">
 {: .text-delta }
-<summary>Table of contents</summary>
+<summary>Aufteilung der Contributions der einzelnen Teammitglieder</summary>
 + ToC
 {: toc }
 </details>
@@ -21,13 +21,16 @@ nav_order: 4
 ## [Max Stiasny]
 
 Contributions
-: Lorem ipsum dolor
-: Consetetur sadipscing elitr
+: back-end (app.py, forms.py, funtctions.py, db.py)
+: overlay.html
+: Datenbank Struktur (sql folder)
+: Dokumentation
 : ...
 
 ## [Lukas Hoppart]
 
 Contributions
-: Diam nonumy eirmod
-: Tempor invidunt ut labore
+: front-end
+: static (css)
+: templates (html)
 : ...
