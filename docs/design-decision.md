@@ -52,6 +52,9 @@ Wir haben zwei Alternativen in Betracht gezogen:
 | **Change DB schema** | ❌ SQL ist über den Code verteilt | ❔ Vorteil: Klassenstruktur, Nachteil: zusätzlich Alembic nötig |
 | **Switch DB engine** | ❌ Unterschiedliche SQL-Dialekte | ✔️ Abstrahiert die Datenbank-Engine |
 
+
+---
+
 ## 02: Aktualisierung der DOM-Elemente ohne JavaScript
 
 ### Meta
@@ -101,6 +104,7 @@ Wir haben drei Alternativen in Betracht gezogen:
 | **Echtzeit-Aktualität** | ✔️ Quasei-Echtzeit  | ❌ Nur Bei Reload | ✔️ Echtzeit |
 
 
+---
 
 ## 03: Entfernung des Pricing- und Abonnement-Systems
 
@@ -145,3 +149,229 @@ Wir haben zwei Alternativen in Betracht gezogen:
 | **Technische Komplexität** | ❌ Hoch | ✔️ Gering |
 | **Implementierungsaufwand** | ❌ Hoch | ✔️ Niedrig |
 | **Mehrwert für MVP** | ❌ Gering | ✔️ Hoch |
+
+
+---
+
+## 04: Gruppenbeitritt und Zugriffsschutz über Redirect-Flow
+
+### Meta
+
+Status
+: Work in progress - **Decided** - Obsolete
+
+### Problem statement
+
+Wir mussten entscheiden, wie der Beitritt zu Gruppen sowie der Zugriffsschutz auf die Gruppenseite umgesetzt werden soll.
+
+Anforderungen dabei:
+- Nur eingeloggte Nutzer dürfen Gruppen beitreten und Gruppenseiten sehen.
+- Gruppen können passwortgeschützt sein.
+- Nutzer sollen nicht mehrfach derselben Gruppe beitreten können.
+- Die Lösung soll einfach bleiben und ohne zusätzliche Komplexität (z. B. separate Access-Control-Layer) funktionieren.
+
+### Decision
+
+Wir implementieren einen zweistufigen Flow:
+
+1. /group/<group_id>/ ist die zentrale Gruppenseite.
+
+- Dort wird bei jedem Aufruf geprüft, ob der Nutzer Mitglied ist.
+- Falls nicht, erfolgt ein Redirect auf /join/<group_id>/.
+
+2. /join/<group_id>/ dient als Beitrittsseite (Passwortabfrage).
+
+- Bei GET: Formular anzeigen
+- Bei POST: Passwort prüfen und Nutzer in group_members eintragenkt.
+
+### Cause
+
+- Klare Trennung von Verantwortlichkeiten
+    - /group/... = Inhalte anzeigen / Gruppen-Features
+    - /join/... = Membership herstellen (mit Passwortprüfung)
+- Zuverlässiger Zugriffsschutz
+    - Selbst wenn jemand direkt die URL /group/<id>/ kennt, greift die Membership-Prüfung und leitet auf den Join-Prozess um
+- Verhindert doppelte Mitgliedschaften
+    - Vor dem Eintragen wird geprüft, ob bereits ein Eintrag in group_members existiert.
+- Einfacher Implementierungsaufwand
+- Bessere User Experience als “harte” Fehler
+    - Statt 403/404 bekommen Nutzer direkt den „richtigen nächsten Schritt“ (Join-Seite), wenn ihnen die Berechtigung fehlt.
+
+*Decision was taken by:* Max Stiasny
+
+### Regarded options
+
+Wir haben zwei Alternativen in Betracht gezogen:
+
++ Redirect-Flow: Zugriff auf Gruppenseite prüft Membership und leitet ggf. auf Join-Seite um (gewählt)
++ Gruppenseite immer öffentlich, Inhalte je nach Membership ausblenden
++ Bei fehlender Membership direkt 403 Forbidden anzeigen (kein Join-Flow)
+
+| Kriterium | Redirect-Flow (gewählt) | Öffentlich + Ausblenden | 403 Forbidden | 
+| --- | --- | --- | --- |
+| **Zugriffsschutz** | ✔️ Stark  | ❔ Fehleranfällig | ✔️ Stark |
+| **User Experience** | ✔️ Führt Nutzer direkt zum Beitritt | ❌ Unklar, was zu tun ist | ❌ Sackgasse |
+| **Implementierungsaufwand** | ✔️ Gering | ❔ Mittel (viele Sonderfälle im Template) | ✔️ Gering |
+| **MVP-Tauglichkeit** | ✔️ Hoch | ❔ Mittel | ❌ Niedrig |
+
+
+---
+
+## 05: Authentifizierung über Flask-Session und `login_required`
+
+### Meta
+**Status**  
+: In Arbeit – **Entschieden** – Obsolet
+
+### Problemstellung
+Geschützte Bereiche (z. B. Gruppen, Overlay, Profil) dürfen nur von eingeloggten Nutzern aufgerufen werden.
+
+### Entscheidung
+Wir verwenden **session-basierte Authentifizierung** über Flask (`session['user_id']`) und schützen Routen mit einem **`login_required` Decorator**.
+
+### Begründung
+- Einfach umzusetzen und gut für ein MVP geeignet  
+- Keine zusätzliche Infrastruktur (JWT, OAuth etc.) nötig  
+- Klare und zentrale Zugriffskontrolle
+
+### Betrachtete Optionen
+
+| Kriterium | Session + Decorator (gewählt) | JWT/Token | OAuth |
+|----------|-------------------------------|-----------|-------|
+| Aufwand | ✔️ niedrig | ❌ höher | ❌ hoch |
+| MVP-tauglich | ✔️ | ❔ | ❌ |
+
+
+---
+
+## 06: Passwort-Handling im Klartext für das MVP
+
+### Meta
+**Status**  
+: In Arbeit – **Entschieden** – Obsolet
+
+### Problemstellung
+Passwörter für Login und Gruppenbeitritt müssen geprüft werden. Es stellt sich die Frage, ob diese gehasht oder direkt verglichen werden sollen.
+
+### Entscheidung
+Passwörter werden im MVP **ungehasht gespeichert und verglichen**.
+
+### Begründung
+- Fokus liegt auf Funktionalität und Lernziel  
+- Reduzierte Komplexität  
+- Hashing kann in einer späteren Version ergänzt werden
+
+### Konsequenzen / Risiken
+- ❌ Sicherheitsrisiko  
+- ❌ Nicht best-practice-konform  
+- ✅ Schnell und einfach für MVP
+
+### Betrachtete Optionen
+
+| Kriterium | Klartext (gewählt) | Hashing |
+|----------|-------------------|---------|
+| Aufwand | ✔️ niedrig | ❌ höher |
+| Sicherheit | ❌ schlecht | ✔️ gut |
+
+
+---
+
+## 07: Zugriffsschutz über Membership-Check mit Redirect statt 403
+
+### Meta
+**Status**  
+: In Arbeit – **Entschieden** – Obsolet
+
+### Problemstellung
+Nicht-Mitglieder sollen keinen Zugriff auf Gruppen- oder Overlay-Seiten haben, sollen aber möglichst einfach beitreten können.
+
+### Entscheidung
+Bei fehlender Mitgliedschaft wird der Nutzer **auf die Join-Seite weitergeleitet**, statt einen 403-Fehler auszugeben.
+
+### Begründung
+- Bessere User Experience  
+- Klare Führung zum nächsten Schritt  
+- Einfache Umsetzung
+
+### Betrachtete Optionen
+
+| Kriterium | Redirect (gewählt) | 403 Forbidden |
+|----------|--------------------|---------------|
+| UX | ✔️ gut | ❌ schlecht |
+| Aufwand | ✔️ niedrig | ✔️ niedrig |
+
+
+---
+
+## 08: Suche mit SQL `LIKE` und vorbereinigtem Query-Parameter
+
+### Meta
+**Status**  
+: In Arbeit – **Entschieden** – Obsolet
+
+### Problemstellung
+Es wird eine einfache Suchfunktion für Gruppen und Challenges benötigt.
+
+### Entscheidung
+Die Suche erfolgt über `LIKE '%query%'` in SQL. Der Suchstring wird in Python mit `strip()` und `lower()` vorbereitet.
+
+### Begründung
+- Sehr einfacher Ansatz  
+- Ausreichend für kleine Datenmengen  
+- Keine zusätzlichen Abhängigkeiten
+
+### Konsequenzen / Risiken
+- ❌ Case-Insensitive-Verhalten DB-abhängig  
+- ❌ Performance bei großen Datenmengen  
+- ✅ MVP-geeignet
+
+---
+
+## 09: Statusmodell für Gruppen-Challenges
+
+### Meta
+**Status**  
+: In Arbeit – **Entschieden** – Obsolet
+
+### Problemstellung
+Challenges innerhalb einer Gruppe können geplant, aktiv oder abgeschlossen sein.
+
+### Entscheidung
+Wir verwenden ein Statusfeld mit den Werten:
+- `queued`
+- `active`
+- `done`
+
+Zusätzlich werden Zeitstempel wie `started_at` und `finished_at` gespeichert.
+
+### Begründung
+- Klare Domänenlogik  
+- Gute Erweiterbarkeit  
+- Einfache Filterung nach Status
+
+---
+
+## 10: Nur eine aktive Challenge pro Gruppe (Applikationslogik)
+
+### Meta
+**Status**  
+: In Arbeit – **Entschieden** – Obsolet
+
+### Problemstellung
+Pro Gruppe darf immer nur eine Challenge aktiv sein.
+
+### Entscheidung
+Die Einschränkung wird **applikationsseitig** umgesetzt:
+1. Alle aktiven Challenges werden auf `queued` gesetzt  
+2. Die gewählte Challenge wird auf `active` gesetzt
+
+### Begründung
+- Einfacher als DB-Constraints  
+- MVP-freundlich  
+- Verständlich im Code
+
+### Konsequenzen / Risiken
+- ❌ Race-Conditions bei parallelen Requests möglich  
+- ✅ Akzeptabel bei geringer Last
+
+---
