@@ -19,7 +19,7 @@ nav_order: 3
 {: toc }
 </details>
 
-## Routes
+## Home
 
 ### `index()`
 
@@ -30,33 +30,6 @@ nav_order: 3
 **Purpose:** Render the landing page.
 
 **Sample output:** HTML page (`index.html`).
-
----
-
-### `overlay(group_id)`
-
-**Route:** `/overlay/<int:group_id>/`
-
-**Methods:** `GET`
-
-**Purpose:** Display an overlay view for a specific group. Supports returning either an HTML overlay page or a JSON payload for polling/stream overlays.
-
-**Query parameters:**
-- `json` (optional): if present (e.g. `?json=1`), the route returns a JSON response instead of HTML.
-
-**Authentication:** Requires login (`logincheck()`).
-
-**Sample output:**
-
-- **HTML mode (default):** renders `overlay.html`
-- **JSON mode (`?json=1`):**
-```json
-{
-  "group_name": "My Group",
-  "active_challenge": {"id": 1, "title": "Example", "status": "active"},
-  "queued_challenges": [{"id": 2, "title": "Next challenge", "status": "queued"}]
-}
-```
 
 ---
 
@@ -96,16 +69,6 @@ nav_order: 3
 **Methods:** `GET`
 
 **Purpose:** Render the support page.
-
----
-
-### `pricing()`
-
-**Route:** `/pricing/`
-
-**Methods:** `GET`
-
-**Purpose:** Render the pricing page.
 
 ---
 
@@ -182,6 +145,20 @@ nav_order: 3
 **Methods:** `GET` `POST`
 
 **Purpose:** Display and manage a group and its challenges.
+## Overlay
+
+### `overlay(group_id)`
+
+**Route:** `/overlay/<int:group_id>/`
+
+**Methods:** `GET`
+
+**Purpose:** Display an overlay view for a specific group. Supports returning either an HTML overlay page or a JSON payload for polling/stream overlays.
+
+**Query parameters:**
+- `json` (optional): if present (e.g. `?json=1`), the route returns a JSON response instead of HTML.
+
+**Authentication:** Requires login (`logincheck()`).
 
 ---
 
@@ -209,9 +186,9 @@ nav_order: 3
 
 ---
 
-## Internal helpers
+## Internal helpers in functions.py
 
-### `logincheck()`
+### `login_required()`
 
 **Purpose:** Guard for protected routes. Redirects to login if user is not authenticated.
 

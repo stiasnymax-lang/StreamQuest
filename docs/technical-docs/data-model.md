@@ -20,7 +20,6 @@ Speichert alle registrierten Nutzer, die sich in StreamQuest anmelden können.
 | `username`   | TEXT       | Anzeigename im System                      |
 | `password`   | TEXT       | Passwort-Hash für den Login                |
 | `email`      | TEXT       | E-Mail-Adresse des Nutzers                 |
-| `abonoment`  | INTEGER    | Welche Stufe das Abo vom User ist          |
 
 
 ### `challenges`
