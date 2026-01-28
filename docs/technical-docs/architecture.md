@@ -28,9 +28,9 @@ Diese Anwendung ist eine Flask-basierte Plattform für gemeinsame bestreiten von
 - 
 
 ## Codemap
+![Code Map](../../assets/images/CodeMap.png) 
 
 ## Home Screen
-![Code Map](assets/images/CodeMap.png) 
 
 ## Cross-cutting concerns
 
