@@ -4,6 +4,7 @@
     <h1>Gruppe erstellen</h1>
 
     <form method="POST">
+        {{ form.csrf_token }}
         {{ form.hidden_tag() }}
         {{ form.name.label }} {{ form.name() }}
         {{ form.password.label }} {{ form.password() }}

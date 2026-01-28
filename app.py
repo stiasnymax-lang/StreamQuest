@@ -125,12 +125,6 @@ def challenge(challenge_id):
 def support():
     return render_template('support.html')
 
-
-@app.route('/pricing/')
-def pricing():
-    return render_template('pricing.html')
-
-
 @app.route('/guide/')
 def guide():
     return render_template('guide.html')
@@ -203,7 +197,7 @@ def profile():
     user_id = session['user_id']
 
     user = db_con.execute(
-        "SELECT id, username, email, abonoment FROM users WHERE id = ?",
+        "SELECT id, username, email FROM users WHERE id = ?",
         (user_id,)
     ).fetchone()
 

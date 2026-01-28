@@ -1,10 +1,11 @@
 ---
 title: User Evaluation
-nav_order: 3
+nav_order: 4
 ---
 
 {: .label }
-[Jane Dane]
+[Max Stiasny]
+[Lukas Hoppart]
 
 {: .no_toc }
 # User evaluation
