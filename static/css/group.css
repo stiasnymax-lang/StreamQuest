@@ -1,0 +1,209 @@
+/* =========================
+   group.css (nur group.html)
+   basiert auf base.html styles
+   ========================= */
+
+/* Base reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Base layout */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1A1024;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+a {
+    color: #d9c7ff;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #ffffff;
+}
+
+/* Nav (aus base.html) */
+nav {
+    background-color: #22182C;
+    padding: 12px;
+    text-align: center;
+}
+
+nav a {
+    color: #d9c7ff;
+    margin: 0 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #ffffff;
+}
+
+/* Main container (aus base.html) */
+main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: #22182C;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    color: #fff;
+}
+
+/* Footer (aus base.html) */
+footer {
+    text-align: center;
+    padding: 1rem;
+    opacity: 0.7;
+}
+
+/* Buttons + Inputs (aus base.html) */
+button,
+input[type="submit"] {
+    background-color: #A051F6;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button:hover,
+input[type="submit"]:hover {
+    background-color: #7a36c4;
+}
+
+input[type="text"],
+input[type="search"] {
+    width: 100%;
+    padding: 6px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="text"]:hover,
+input[type="search"]:hover {
+    border-color: #A051F6;
+}
+
+/* List styling (aus base.html) */
+ul {
+    padding-left: 0;
+}
+
+li {
+    list-style: none;
+    margin: 8px 0;
+    padding: 12px 16px;
+    background-color: #372747;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+li:hover {
+    background-color: #68084b;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================
+   Group Page Specific Styles
+   ========================= */
+
+/* Headings */
+.group-title {
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+}
+
+.group-owner {
+    color: #c2b4d6;
+    margin-bottom: 1rem;
+}
+
+/* Action buttons (leave / delete) */
+.group-actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.group-actions form {
+    display: inline-block;
+}
+
+/* Sections */
+.group-section {
+    margin-top: 2rem;
+}
+
+.group-section h2 {
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid #372747;
+    padding-bottom: 0.25rem;
+}
+
+/* Member list */
+.group-members li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.group-members form {
+    margin-left: 10px;
+}
+
+/* Challenge cards */
+.challenge-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.challenge-meta {
+    font-size: 0.85rem;
+    color: #c2b4d6;
+}
+
+/* Inline form buttons */
+.inline-form {
+    margin-top: 6px;
+}
+
+/* Search form */
+.group-search {
+    margin-bottom: 1rem;
+}
+
+.group-search form {
+    display: flex;
+    gap: 8px;
+}
+
+.group-search input[type="search"] {
+    flex: 1;
+}
+
+/* Overlay field */
+.overlay-fieldset {
+    border: 1px solid #372747;
+    border-radius: 6px;
+    padding: 12px;
+}
+
+.overlay-fieldset legend {
+    padding: 0 6px;
+    font-size: 0.85rem;
+    color: #c2b4d6;
+}

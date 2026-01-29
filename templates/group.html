@@ -1,132 +1,178 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Group: {{ group.name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% block title %}Group: {{ group.name }}{% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/group.css') }}">
+</head>
 
-{% block content %}
+<body>
 
-<h1>{{ group.name }}</h1>
-<p><strong>Owner:</strong> {{ owner.username }}</p>
+<nav>
+    <a href="/">Home</a>
+    <a href="/groups">Gruppen</a>
+    <a href="/challenges">Challenges</a>
+    <a href="/profile">Profil</a>
+    <a href="/create_group">Gruppe erstellen</a>
+    <a href="/guide">Guide</a>
+    <a href="/support">Support</a>
+    <a href="/login">Login</a>
+</nav>
 
-<!-- Group actions -->
-{% if owner.id != session['user_id'] %}
-    <form method="POST">
-        {{ action_form.csrf_token }}
-        {{ action_form.leave_group() }}
-    </form>
-{% endif %}
+<main>
 
-{% if owner.id == session['user_id'] %}
-<form method="POST">
-    {{ action_form.csrf_token }}
-    {{ action_form.delete_group() }}
-</form>
-{% endif %}
+    <h1 class="group-title">{{ group.name }}</h1>
+    <p class="group-owner"><strong>Owner:</strong> {{ owner.username }}</p>
 
-<hr>
+    <!-- Group actions -->
+    <div class="group-actions">
+        {% if owner.id != session['user_id'] %}
+            <form method="POST">
+                {{ action_form.csrf_token }}
+                {{ action_form.leave_group() }}
+            </form>
+        {% endif %}
 
-<!-- Members -->
-<h2>Members</h2>
-<ul>
-{% for user in group_members %}
-    <li>
-        {{ user.username }}
-        <form method="POST" style="display:inline;">
-            {{ action_form.csrf_token }}
-            {{ action_form.member_id(value=user.id) }}
-            {% if owner.id == session['user_id'] %}
-                {{ action_form.remove_member() }}
-            {% endif %}
+        {% if owner.id == session['user_id'] %}
+            <form method="POST">
+                {{ action_form.csrf_token }}
+                {{ action_form.delete_group() }}
+            </form>
+        {% endif %}
+    </div>
+
+    <hr>
+
+    <!-- Members -->
+    <section class="group-section">
+        <h2>Members</h2>
+        <ul class="group-members">
+            {% for user in group_members %}
+                <li>
+                    <span>{{ user.username }}</span>
+
+                    <form method="POST" style="display:inline;">
+                        {{ action_form.csrf_token }}
+                        {{ action_form.member_id(value=user.id) }}
+                        {% if owner.id == session['user_id'] %}
+                            {{ action_form.remove_member() }}
+                        {% endif %}
+                    </form>
+                </li>
+            {% else %}
+                <li>No members in this group.</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <hr>
+
+    <!-- Active Challenge -->
+    <section class="group-section">
+        <h2>Aktive Challenge</h2>
+
+        {% if active_challenge %}
+            <div class="challenge-item">
+                <li>
+                    <h3>{{ active_challenge.title }}</h3>
+                    <p class="challenge-meta">{{ active_challenge.game_name }}</p>
+                    <p><small>{{ active_challenge.description }}</small></p>
+                </li>
+                <form method="POST" class="inline-form">
+                    {{ action_form.csrf_token }}
+                    {{ action_form.challenge_id(value=active_challenge.id) }}
+                    {{ action_form.completed_challenge() }}
+                </form>
+            </div>
+        {% else %}
+            <p>Gerade keine aktive Challenge</p>
+        {% endif %}
+    </section>
+
+    <hr>
+
+    <!-- Queued Challenges -->
+    <section class="group-section">
+        <h2>Restliche Challenges</h2>
+        <ul>
+            {% for ch in queued_challenges %}
+                <li class="challenge-item">
+                    <strong>{{ ch.title }}</strong>
+                    <span class="challenge-meta">{{ ch.game_name }} · {{ ch.status }}</span>
+
+                    <form method="POST" class="inline-form">
+                        {{ action_form.csrf_token }}
+                        {{ action_form.challenge_id(value=ch.id) }}
+                        {{ action_form.set_active() }}
+                        {{ action_form.delete_challenge() }}
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <hr>
+
+    <!-- Done Challenges -->
+    <section class="group-section">
+        <h2>Erledigte Challenges</h2>
+        <ul>
+            {% for ch in done_challenges %}
+                <li>
+                    {{ ch.title }} <small>({{ ch.status }})</small>
+                </li>
+            {% else %}
+                <li>No completed challenges yet.</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <hr>
+
+    <!-- Overlay -->
+    <section class="group-section">
+        <fieldset class="overlay-fieldset">
+            <legend>Challenge Overlay</legend>
+            <input type="text" readonly
+                value="{{ url_for('overlay', group_id=group.id, _external=True) }}"
+                style="width:100%;">
+        </fieldset>
+    </section>
+
+    <hr>
+
+    <!-- Search -->
+    <section class="group-section group-search">
+        <h2>Challenge hinzufügen</h2>
+
+        <form method="GET">
+            {{ search_form.q(placeholder="Search challenges") }}
+            {{ search_form.submit() }}
         </form>
-    </li>
-{% else %}
-    <li>No members in this group.</li>
-{% endfor %}
-</ul>
 
-<hr>
+        <ul>
+            {% for challenge in challenges %}
+                <li class="challenge-item">
+                    <strong>{{ challenge.title }}</strong>
+                    <span class="challenge-meta">{{ challenge.game_name }}</span>
 
-<!-- Active Challenge -->
-<h2>Aktive Challenge</h2>
+                    <form method="POST" class="inline-form">
+                        {{ action_form.csrf_token }}
+                        {{ action_form.challenge_id(value=challenge.id) }}
+                        {{ action_form.add_challenge() }}
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
 
-{% if active_challenge %}
-    <h3>{{ active_challenge.title }}</h3>
-    <p>{{ active_challenge.game_name }}</p>
-    <p><small>{{ active_challenge.description }}</small></p>
+</main>
 
-    <form method="POST">
-        {{ action_form.csrf_token }}
-        {{ action_form.challenge_id(value=active_challenge.id) }}
-        {{ action_form.completed_challenge() }}
-    </form>
-{% else %}
-    <p>Gerade keine aktive Challenge</p>
-{% endif %}
+<footer>
+    <p>&copy; StreamQuest</p>
+</footer>
 
-<hr>
-
-<!-- Queued Challenges -->
-<h2>Restliche Challenges</h2>
-<ul>
-{% for ch in queued_challenges %}
-    <li>
-        <strong>{{ ch.title }}</strong> ({{ ch.game_name }})
-        <small>{{ ch.status }}</small>
-
-        <form method="POST">
-            {{ action_form.csrf_token }}
-            {{ action_form.challenge_id(value=ch.id) }}
-            {{ action_form.set_active() }}
-            {{ action_form.delete_challenge() }}
-        </form>
-    </li>
-{% endfor %}
-</ul>
-
-<hr>
-
-<!-- Done Challenges -->
-<h2>Erledigte Challenges</h2>
-<ul>
-{% for ch in done_challenges %}
-    <li>
-        {{ ch.title }} <small>({{ ch.status }})</small>
-    </li>
-{% else %}
-    <li>No completed challenges yet.</li>
-{% endfor %}
-</ul>
-
-<hr>
-
-<!-- Overlay -->
-<fieldset>
-    <legend>Challenge Overlay</legend>
-    <input type="text" readonly
-        value="{{ url_for('overlay', group_id=group.id, _external=True) }}"
-        style="width:100%;">
-</fieldset>
-
-<hr>
-
-<!-- Search -->
-<h2>Challenge hinzufügen</h2>
-
-<form method="GET">
-    {{ search_form.q(placeholder="Search challenges") }}
-    {{ search_form.submit() }}
-</form>
-
-<ul>
-{% for challenge in challenges %}
-    <li>
-        {{ challenge.title }} ({{ challenge.game_name }})
-        <form method="POST">
-            {{ action_form.csrf_token }}
-            {{ action_form.challenge_id(value=challenge.id) }}
-            {{ action_form.add_challenge() }}
-        </form>
-    </li>
-{% endfor %}
-</ul>
-
-{% endblock %}
+</body>
+</html>
