@@ -10,15 +10,15 @@
 <!-- Group actions -->
 {% if owner.id != session['user_id'] %}
     <form method="POST">
-        {{ form.csrf_token }}
-        {{ form.leave_group() }}
+        {{ action_form.csrf_token }}
+        {{ action_form.leave_group() }}
     </form>
 {% endif %}
 
 {% if owner.id == session['user_id'] %}
 <form method="POST">
-    {{ form.csrf_token }}
-    {{ form.delete_group() }}
+    {{ action_form.csrf_token }}
+    {{ action_form.delete_group() }}
 </form>
 {% endif %}
 
@@ -31,10 +31,10 @@
     <li>
         {{ user.username }}
         <form method="POST" style="display:inline;">
-            {{ form.csrf_token }}
-            {{ form.member_id(value=user.id) }}
+            {{ action_form.csrf_token }}
+            {{ action_form.member_id(value=user.id) }}
             {% if owner.id == session['user_id'] %}
-                {{ form.remove_member() }}
+                {{ action_form.remove_member() }}
             {% endif %}
         </form>
     </li>
@@ -54,9 +54,9 @@
     <p><small>{{ active_challenge.description }}</small></p>
 
     <form method="POST">
-        {{ form.csrf_token }}
-        {{ form.challenge_id(value=active_challenge.id) }}
-        {{ form.completed_challenge() }}
+        {{ action_form.csrf_token }}
+        {{ action_form.challenge_id(value=active_challenge.id) }}
+        {{ action_form.completed_challenge() }}
     </form>
 {% else %}
     <p>Gerade keine aktive Challenge</p>
@@ -73,10 +73,10 @@
         <small>{{ ch.status }}</small>
 
         <form method="POST">
-            {{ form.csrf_token }}
-            {{ form.challenge_id(value=ch.id) }}
-            {{ form.set_active() }}
-            {{ form.delete_challenge() }}
+            {{ action_form.csrf_token }}
+            {{ action_form.challenge_id(value=ch.id) }}
+            {{ action_form.set_active() }}
+            {{ action_form.delete_challenge() }}
         </form>
     </li>
 {% endfor %}
@@ -112,7 +112,8 @@
 <h2>Challenge hinzufügen</h2>
 
 <form method="GET">
-    <input type="search" name="q" placeholder="Search challenges" value="{{ q }}">
+    {{ search_form.q(placeholder="Search challenges") }}
+    {{ search_form.submit() }}
 </form>
 
 <ul>
@@ -120,9 +121,9 @@
     <li>
         {{ challenge.title }} ({{ challenge.game_name }})
         <form method="POST">
-            {{ form.csrf_token }}
-            {{ form.challenge_id(value=challenge.id) }}
-            {{ form.add_challenge() }}
+            {{ action_form.csrf_token }}
+            {{ action_form.challenge_id(value=challenge.id) }}
+            {{ action_form.add_challenge() }}
         </form>
     </li>
 {% endfor %}

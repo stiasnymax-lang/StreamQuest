@@ -40,7 +40,10 @@ class GroupForm(FlaskForm):
     leave_group = SubmitField('Leave Group') 
     delete_group = SubmitField('Delete Group')
     remove_member = SubmitField('Remove Member') 
-    submit = SubmitField('Search') #fehlt
+
+class GroupChallengeSearchForm(FlaskForm):
+    q = StringField('Search')
+    submit = SubmitField('Search')
 
 class ChallengeForm(FlaskForm):
     title = StringField(validators=[InputRequired(), Length(min=2)])

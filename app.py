@@ -309,7 +309,8 @@ def group(group_id):
     
     db_con = db.get_db_con()
     user_id = session['user_id']
-    form = forms.GroupForm()
+    action_form = forms.GroupForm()
+    search_form = forms.GroupChallengeSearchForm(request.args)
     
     # Prüfe, ob User Mitglied ist
     is_member = db_con.execute(
@@ -374,7 +375,7 @@ def group(group_id):
     """, (group_id,)).fetchall()
 
     #search functionality
-    q = request.args.get("q", "").strip().lower()
+    q = (search_form.q.data or "").strip().lower()
 
     challenges = db_con.execute("""
         SELECT id, title, game_name
@@ -393,35 +394,35 @@ def group(group_id):
             group_members=group_members,
             active_challenge=active_challenge,
             done_challenges=done_challenges,
-            queued_challenges=queued_challenges, 
-            is_member=is_member,
+            queued_challenges=queued_challenges,
             challenges=challenges,
             q=q,
-            form=form,
-            group_challenges=group_challenges,
+            action_form=action_form,
+            search_form=search_form,
             group_id=group_id
         )
+
     else: #request.method == 'POST'
         
-        if form.validate_on_submit():
-            if form.add_challenge.data:
+        if action_form.validate_on_submit():
+            if action_form.add_challenge.data:
                 sql_query = """
                     INSERT OR IGNORE INTO group_challenges (group_id, challenge_id)
                     VALUES (?, ?);
                 """
-                db_con.execute(sql_query, [group_id, form.challenge_id.data])
+                db_con.execute(sql_query, [group_id, action_form.challenge_id.data])
                 db_con.commit()
                 flash('Challenge has been added', 'success')
-            elif form.delete_challenge.data:
+            elif action_form.delete_challenge.data:
                 sql_query = """
                     DELETE FROM group_challenges
                     WHERE group_id = ? AND challenge_id = ?;
                 """
-                db_con.execute(sql_query, [group_id, form.challenge_id.data])
+                db_con.execute(sql_query, [group_id, action_form.challenge_id.data])
                 db_con.commit()
                 flash('Challenge has been deleted', 'success')
 
-            elif form.set_active.data:             
+            elif action_form.set_active.data:             
                 # alte active deaktivieren
                 db_con.execute("""
                     UPDATE group_challenges
@@ -435,22 +436,22 @@ def group(group_id):
                     UPDATE group_challenges
                     SET status = 'active', started_at = CURRENT_TIMESTAMP
                     WHERE group_id = ? AND challenge_id = ?;
-                """, (group_id, form.challenge_id.data))
+                """, (group_id, action_form.challenge_id.data))
 
                 db_con.commit()
                 flash('Active challenge has been updated.', 'success')
 
-            elif form.completed_challenge.data:
+            elif action_form.completed_challenge.data:
                 # Markiere die aktive Challenge als 'done'
                 db_con.execute("""
                     UPDATE group_challenges
                     SET status = 'done', finished_at = CURRENT_TIMESTAMP
                     WHERE group_id = ? AND challenge_id = ?;
-                """, (group_id, form.challenge_id.data))
+                """, (group_id, action_form.challenge_id.data))
                 db_con.commit()
                 flash('Challenge marked as completed.', 'success')
             
-            elif form.start_session.data:
+            elif action_form.start_session.data:
                 db_con.execute("""
                     UPDATE groups
                     SET session_start = CURRENT_TIMESTAMP
@@ -459,7 +460,7 @@ def group(group_id):
                 db_con.commit()
                 flash('Session has been started', 'success')
 
-            elif form.leave_group.data:
+            elif action_form.leave_group.data:
                 if user_id == group_row['owner_id']:
                     flash('Group owner cannot leave the group.', 'error')
                     return redirect(url_for('group', group_id=group_id))
@@ -472,7 +473,7 @@ def group(group_id):
                 flash('You have left the group.', 'success')
                 return redirect(url_for('groups'))
             
-            elif form.delete_group.data:
+            elif action_form.delete_group.data:
                 if user_id == group_row['owner_id']:
                     db_con.execute("DELETE FROM group_challenges WHERE group_id = ?", (group_id,))
                     db_con.execute("DELETE FROM group_members WHERE group_id = ?", (group_id,))
@@ -483,13 +484,13 @@ def group(group_id):
                 else:
                     flash('Only the group owner can delete the group.', 'error')
 
-            elif form.remove_member.data:
+            elif action_form.remove_member.data:
                 # Nur der Owner kann Mitglieder entfernen
                 if user_id == group_row['owner_id']:
                     db_con.execute("""
                         DELETE FROM group_members
                         WHERE user_id = ? AND group_id = ?;
-                    """, (form.member_id.data, group_id))  # Using challenge_id field to pass user_id
+                    """, (action_form.member_id.data, group_id))  # Using challenge_id field to pass user_id
                     db_con.commit()
                     flash('Member has been removed from the group.', 'success')
                 else:
