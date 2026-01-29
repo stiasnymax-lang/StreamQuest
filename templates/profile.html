@@ -2,76 +2,86 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+    <title>Profil | StreamQuest</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    </head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+</head>
 
 <body>
-    <nav>
-        <a href="/">Home</a>
-        <a href="/groups">Gruppen</a>
-        <a href="/challenges">Challenges</a>
-        <a href="/profile">Profil</a>
-        <a href="/create_group">Gruppe erstellen</a>
-        <a href="/guide">Guide</a>
-        <a href="/support">Support</a>
-        <a href="/login">Login</a>
-    </nav>
-    <section class="profile-page">
-        <div class="profile-shell">
-            <header class="profile-hero">
-                <div class="profile-hero-text">
-                    <p class="profile-kicker">StreamQuest Profil</p>
-                    <h2 class="profile-name">{{ user.username }}</h2>
-                    <p class="profile-meta">User ID: {{ user.id }}</p>
-                </div>
-            </header>
 
-            <div class="profile-grid">
-                <section class="profile-card">
-                    <h3>Account</h3>
-                    <dl class="profile-list">
-                        <div>
-                            <dt>Username</dt>
-                            <dd>{{ user.username }}</dd>
-                        </div>
-                        <div>
-                            <dt>Email</dt>
-                            <dd>{{ user.email }}</dd>
-                        </div>
-                        </dl>
-                </section>
+<nav class="main-nav">
+    <a href="/">Home</a>
+    <a href="/groups">Gruppen</a>
+    <a href="/challenges">Challenges</a>
+    <a href="/profile">Profil</a>
+    <a href="/create_group">Gruppe erstellen</a>
+    <a href="/guide">Guide</a>
+    <a href="/support">Support</a>
+    <a href="/login">Login</a>
+</nav>
 
-                <section class="profile-card">
-                    <dl class="profile-stats">
-                        <div>
-                            <dt>Aktive Gruppe</dt>
-                            <dd>        
+<main class="profile-page">
+    <div class="profile-shell">
 
-                                {% if user_groups %}
-                                <ul>
-                                    {% for g in user_groups %}
-                                    <li>
-                                        <a href="{{ url_for('group', group_id=g.id) }}">{{ g.name }}</a>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                                {% else %}
-                                    <p>Du bist aktuell in keiner Gruppe.</p>
-                                {% endif %}
-                            </dd>
-                        </div>
-                    </dl>
-                </section>
+        <!-- Header -->
+        <header class="profile-hero">
+            <div class="profile-hero-text">
+                <p class="profile-kicker">StreamQuest Profil</p>
+                <h2 class="profile-name">{{ user.username }}</h2>
+                <p class="profile-meta">User ID: {{ user.id }}</p>
             </div>
+        </header>
+
+        <!-- Content Grid -->
+        <div class="profile-grid">
+
+            <!-- Account Card -->
+            <section class="profile-card">
+                <h3>Account</h3>
+                <dl class="profile-list">
+                    <div>
+                        <dt>Username</dt>
+                        <dd>{{ user.username }}</dd>
+                    </div>
+                    <div>
+                        <dt>Email</dt>
+                        <dd>{{ user.email }}</dd>
+                    </div>
+                </dl>
+            </section>
+
+            <!-- Groups Card -->
+            <section class="profile-card">
+                <h3>Gruppen</h3>
+
+                {% if user_groups %}
+                    <ul class="profile-groups">
+                        {% for g in user_groups %}
+                            <li>
+                                <a href="{{ url_for('group', group_id=g.id) }}">{{ g.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="profile-muted">Du bist aktuell in keiner Gruppe.</p>
+                {% endif %}
+            </section>
+
         </div>
-    </section>
-    <form method="POST" action="{{ url_for('profile') }}">
-        {{ form.csrf_token }}
-        {{ form.account_logout() }}
-    </form>
-    <footer>
-        <p>&copy; StreamQuest </p>
-    </footer>
+
+        <!-- Actions -->
+        <form method="POST" action="{{ url_for('profile') }}" class="profile-actions">
+            {{ form.hidden_tag() }}
+            {{ form.account_logout(class_="btn-logout") }}
+        </form>
+
+    </div>
+</main>
+
+<footer class="main-footer">
+    <p>&copy; StreamQuest</p>
+</footer>
+
 </body>
 </html>
