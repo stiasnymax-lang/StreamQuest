@@ -228,7 +228,7 @@ def profile():
         if form.account_logout.data:
             session.clear()
             flash('You have been logged out.', 'success')
-            return redirect(url_for('index')) 
+            return redirect(url_for('profile')) 
     return render_template('profile.html', user=user, user_groups=user_groups, form=form)
 
 
@@ -496,24 +496,37 @@ def group(group_id):
 @app.route('/create_group/', methods=['GET', 'POST'])
 @login_required
 def create_group():
-    
     db_con = db.get_db_con()
     form = forms.CreateGroupForm()
 
-    form.user_id.data = session.get('user_id') 
+    user_id = session['user_id']
+    form.user_id.data = user_id
 
     if request.method == 'GET':
         return render_template('create_group.html', form=form)
+
+    # POST
+    if form.validate():
+        db_con.execute(
+            "INSERT INTO groups (name, password, owner_id) VALUES (?, ?, ?)",
+            (form.name.data, form.password.data, user_id)
+        )
+
+        group_id = db_con.execute(
+            "SELECT last_insert_rowid()"
+        ).fetchone()[0]
+
+        db_con.execute(
+            "INSERT INTO group_members (owner_id, user_id, group_id) VALUES (?, ?, ?)",
+            (user_id, user_id, group_id)
+        )
+        db_con.commit()
+        flash('Group has been created.', 'success')
+        return redirect(url_for('group', group_id=group_id))
     
-    else: #request.method == 'POST'
-        if form.validate():
-            sql_query = 'INSERT INTO groups (name, password, owner_id) VALUES (?, ?, ?);'
-            db_con.execute(sql_query, [form.name.data, form.password.data, form.user_id.data])  
-            db_con.commit()
-            flash('Group has been created.', 'success') 
-        else: 
-            flash('Error creating group. Please check the input fields.', 'error') 
-        return redirect(url_for('groups')) # groups fürs debugging --> /group/<int:group_id>/ direkt zur erstellten
+    flash('Error creating group. Please check the input fields.', 'error')
+    return render_template('create_group.html', form=form)
+
         
 
 @app.route('/insert/sample/')
