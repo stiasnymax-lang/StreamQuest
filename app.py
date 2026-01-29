@@ -235,23 +235,25 @@ def profile():
 
 # -------- Groups --------
 
-@app.route('/groups/')
+@app.route('/groups/', methods=['GET'])
 def groups():
     db_con = db.get_db_con()
-        #search functionality
-    g = request.args.get("g", "").strip().lower()
+    form = forms.GroupsSearchForm(request.args)
+
+    # Suchtext aus Formular (GET)
+    g = (form.g.data or "").strip().lower()
 
     groups = db_con.execute("""
         SELECT
-        g.id, g.name,
-        COUNT(gm.user_id) AS member_count
-        FROM groups g
-        LEFT JOIN group_members gm ON gm.group_id = g.id
-        GROUP BY g.id, g.name
+            g.id, g.name, COUNT(gm.user_id) AS member_count
+            FROM groups g
+            LEFT JOIN group_members gm ON gm.group_id = g.id
+            WHERE g.name LIKE ?
+            GROUP BY g.id, g.name
         ORDER BY g.name
-    """).fetchall()
+    """, (f"%{g}%",)).fetchall()
 
-    return render_template('groups.html', groups=groups, g=g)
+    return render_template('groups.html', groups=groups, form=form, g=g)
 
 @app.route('/join/<int:group_id>/', methods=['GET', 'POST'])
 @login_required

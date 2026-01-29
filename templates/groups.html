@@ -1,18 +1,21 @@
 {% extends "base.html" %}
 
-{% block TITLE %}Gruppen{% endblock %}
+{% block title %}Gruppen{% endblock %}
 
 {% block content %}
 <h1>Alle Gruppen</h1>
-    <form method="get">
-        <input type="search" name="g" placeholder="Search group to join" value="{{ g }}">
-    </form>
+
+<form method="get">
+    {{ form.g(placeholder="Search group to join") }}
+    {{ form.submit() }}
+</form>
+
 <ul>
     {% for group in groups %}
     <li>
-        <label for="{{ group.id }}">
-            <a href="{{ url_for('group', group_id=group.id) }}">{{ group.name }} (Members: {{ group.member_count + 1 }})</a>
-        </label>
+        <a href="{{ url_for('group', group_id=group.id) }}">
+            {{ group.name }} (Members: {{ group.member_count + 1 }})
+        </a>
     </li>
     {% endfor %}
 </ul>

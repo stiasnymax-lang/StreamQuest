@@ -50,4 +50,5 @@ class ChallengeForm(FlaskForm):
     time_needed = StringField(validators=[InputRequired()])
 
 class GroupsSearchForm(FlaskForm):
-    submit = SubmitField('Search') #fehlt
+    g = StringField('Search')
+    submit = SubmitField('Search')
