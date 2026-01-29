@@ -3,98 +3,129 @@
 {% block title %}Group: {{ group.name }}{% endblock %}
 
 {% block content %}
-    <h1>Group: {{ group.name }}</h1>
-    <p><strong>Owner:</strong> {{ owner.username }}</p>
 
-    <!-- Mitglieder-Liste -->
-    <h2>Members</h2>
-    <ul>
-        {% for user in group_members %}
-            <li>{{ user.username }}</li>
-        {% else %}
-            <li>No members in this group.</li>
-        {% endfor %}
-    </ul>
+<h1>{{ group.name }}</h1>
+<p><strong>Owner:</strong> {{ owner.username }}</p>
 
-    <!-- Session-Start-Button -->
-    <form method="POST" action="{{ url_for('group', group_id=group.id) }}">
+<!-- Group actions -->
+{% if owner.id != session['user_id'] %}
+    <form method="POST">
+        {{ form.csrf_token }}
+        {{ form.leave_group() }}
+    </form>
+{% endif %}
+
+{% if owner.id == session['user_id'] %}
+<form method="POST">
+    {{ form.csrf_token }}
+    {{ form.delete_group() }}
+</form>
+{% endif %}
+
+<hr>
+
+<!-- Members -->
+<h2>Members</h2>
+<ul>
+{% for user in group_members %}
+    <li>
+        {{ user.username }}
+        <form method="POST" style="display:inline;">
+            {{ form.csrf_token }}
+            {{ form.member_id(value=user.id) }}
+            {% if owner.id == session['user_id'] %}
+                {{ form.remove_member() }}
+            {% endif %}
+        </form>
+    </li>
+{% else %}
+    <li>No members in this group.</li>
+{% endfor %}
+</ul>
+
+<hr>
+
+<!-- Active Challenge -->
+<h2>Aktive Challenge</h2>
+
+{% if active_challenge %}
+    <h3>{{ active_challenge.title }}</h3>
+    <p>{{ active_challenge.game_name }}</p>
+    <p><small>{{ active_challenge.description }}</small></p>
+
+    <form method="POST">
         {{ form.csrf_token }}
         {{ form.challenge_id(value=active_challenge.id) }}
-        {{ form.start_session() }}
+        {{ form.completed_challenge() }}
     </form>
+{% else %}
+    <p>Gerade keine aktive Challenge</p>
+{% endif %}
 
-    <!-- Aktive Challenge -->
+<hr>
 
-    {% if active_challenge %}
-        <h1>Aktive Challenge</h1>
-        <li>
-            <form method="POST" action="{{ url_for('group', group_id=group.id) }}">
-            {{ form.csrf_token }}
-            <strong>{{ active_challenge.title }}</strong>
-            {{ form.challenge_id(value=active_challenge.id) }}
-            {{ form.completed_challenge() }}
-            </form>
-        </li>
-        <p>{{ active_challenge.game_name }}</p>
-        <p><small>{{ active_challenge.description }}</small></p>
-            
-    {% else %}
-        <p>Gerade keine aktive Challenge</p>
-    {% endif %}
-
-    <h2>Restliche Challenges</h2>
-    {% if queued_challenges %}
-        <ul>
-            {% for ch in queued_challenges %}
-            <li>
-                <form method="POST" action="{{ url_for('group', group_id=group.id) }}">
-                {{ form.csrf_token }}
-                {{ ch.title }}
-                ({{ ch.game_name }})
-                <small> ({{ ch.status }}) </small>
-                {{ form.challenge_id(value=ch.id) }}
-                {{ form.delete_challenge() }}
-                {{ form.set_active() }}
-                </form>
-            </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-        <h2>Erledigte Challenges</h2>
-    {% if done_challenges %}
-        <ul>
-            {% for ch in done_challenges %}
-            <li>
-                {{ ch.title }} 
-                ({{ ch.status }})
-                <small>(time needed: {{group_challenges.started_at}} - {{group_challenges.finished_at}})</small>
-            </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-    <!-- Overlay-Link -->
-    <fieldset>
-        <legend>Challenge Overlay Link</legend>
-        <p>Use the following link to access the challenge overlay:</p>
-        <input type="text" readonly value="{{ url_for('overlay', group_id=group.id, _external=True) }}" style="width:100%;"> <!-- Mit KI generiert -->
-    </fieldset>
-
-        <!-- Challenge-Suche -->
-    <h2>Search Challenges to Add</h2>
-    <form method="get">
-        <input type="search" name="q" placeholder="Search challenges to add" value="{{ q }}">
-    </form>
-    <h3>Search Results</h3>
-{% for challenge in challenges %}
+<!-- Queued Challenges -->
+<h2>Restliche Challenges</h2>
+<ul>
+{% for ch in queued_challenges %}
     <li>
-        {{ challenge.title }} ({{ challenge.game_name }})
-        <form method="POST" action="{{ url_for('group', group_id=group.id) }}">
-        {{ form.csrf_token }}
-        {{ form.challenge_id(value=challenge.id) }}
-        {{ form.add_challenge() }}
+        <strong>{{ ch.title }}</strong> ({{ ch.game_name }})
+        <small>{{ ch.status }}</small>
+
+        <form method="POST">
+            {{ form.csrf_token }}
+            {{ form.challenge_id(value=ch.id) }}
+            {{ form.set_active() }}
+            {{ form.delete_challenge() }}
         </form>
     </li>
 {% endfor %}
+</ul>
+
+<hr>
+
+<!-- Done Challenges -->
+<h2>Erledigte Challenges</h2>
+<ul>
+{% for ch in done_challenges %}
+    <li>
+        {{ ch.title }} <small>({{ ch.status }})</small>
+    </li>
+{% else %}
+    <li>No completed challenges yet.</li>
+{% endfor %}
+</ul>
+
+<hr>
+
+<!-- Overlay -->
+<fieldset>
+    <legend>Challenge Overlay</legend>
+    <input type="text" readonly
+        value="{{ url_for('overlay', group_id=group.id, _external=True) }}"
+        style="width:100%;">
+</fieldset>
+
+<hr>
+
+<!-- Search -->
+<h2>Challenge hinzufügen</h2>
+
+<form method="GET">
+    <input type="search" name="q" placeholder="Search challenges" value="{{ q }}">
+</form>
+
+<ul>
+{% for challenge in challenges %}
+    <li>
+        {{ challenge.title }} ({{ challenge.game_name }})
+        <form method="POST">
+            {{ form.csrf_token }}
+            {{ form.challenge_id(value=challenge.id) }}
+            {{ form.add_challenge() }}
+        </form>
+    </li>
+{% endfor %}
+</ul>
+
 {% endblock %}

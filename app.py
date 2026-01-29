@@ -253,7 +253,7 @@ def groups():
 
     return render_template('groups.html', groups=groups, g=g)
 
-@app.route('/join/<int:group_id>/')
+@app.route('/join/<int:group_id>/', methods=['GET', 'POST'])
 @login_required
 def join_group(group_id):
     db_con = db.get_db_con()
@@ -336,11 +336,11 @@ def group(group_id):
     ).fetchall()
 
     group_members = db_con.execute("""
-        SELECT u.id, u.username, owner_id
-        FROM group_members gm 
+        SELECT u.id, u.username
+        FROM group_members gm
         JOIN users u ON u.id = gm.user_id
-        WHERE u.id != owner_id AND gm.group_id = ?
-    """, (group_id,)).fetchall()
+        WHERE gm.group_id = ? AND gm.user_id != ?;
+    """, (group_id, group_row["owner_id"])).fetchall()
 
     active_challenge = db_con.execute("""
         SELECT c.*, gc.status
@@ -406,7 +406,7 @@ def group(group_id):
                 db_con.execute(sql_query, [group_id, form.challenge_id.data])
                 db_con.commit()
                 flash('Challenge has been added', 'success')
-            if form.delete_challenge.data:
+            elif form.delete_challenge.data:
                 sql_query = """
                     DELETE FROM group_challenges
                     WHERE group_id = ? AND challenge_id = ?;
@@ -415,7 +415,7 @@ def group(group_id):
                 db_con.commit()
                 flash('Challenge has been deleted', 'success')
 
-            if form.set_active.data:             
+            elif form.set_active.data:             
                 # alte active deaktivieren
                 db_con.execute("""
                     UPDATE group_challenges
@@ -434,7 +434,7 @@ def group(group_id):
                 db_con.commit()
                 flash('Active challenge has been updated.', 'success')
 
-            if form.completed_challenge.data:
+            elif form.completed_challenge.data:
                 # Markiere die aktive Challenge als 'done'
                 db_con.execute("""
                     UPDATE group_challenges
@@ -444,7 +444,7 @@ def group(group_id):
                 db_con.commit()
                 flash('Challenge marked as completed.', 'success')
             
-            if form.start_session.data:
+            elif form.start_session.data:
                 db_con.execute("""
                     UPDATE groups
                     SET session_start = CURRENT_TIMESTAMP
@@ -452,6 +452,42 @@ def group(group_id):
                 """, (group_id,))
                 db_con.commit()
                 flash('Session has been started', 'success')
+
+            elif form.leave_group.data:
+                if user_id == group_row['owner_id']:
+                    flash('Group owner cannot leave the group.', 'error')
+                    return redirect(url_for('group', group_id=group_id))
+
+                db_con.execute("""
+                    DELETE FROM group_members
+                    WHERE user_id = ? AND group_id = ?;
+                """, (user_id, group_id))
+                db_con.commit()
+                flash('You have left the group.', 'success')
+                return redirect(url_for('groups'))
+            
+            elif form.delete_group.data:
+                if user_id == group_row['owner_id']:
+                    db_con.execute("DELETE FROM group_challenges WHERE group_id = ?", (group_id,))
+                    db_con.execute("DELETE FROM group_members WHERE group_id = ?", (group_id,))
+                    db_con.execute("DELETE FROM groups WHERE id = ?", (group_id,))
+                    db_con.commit()
+                    flash('Group has been deleted.', 'success')
+                    return redirect(url_for('groups'))
+                else:
+                    flash('Only the group owner can delete the group.', 'error')
+
+            elif form.remove_member.data:
+                # Nur der Owner kann Mitglieder entfernen
+                if user_id == group_row['owner_id']:
+                    db_con.execute("""
+                        DELETE FROM group_members
+                        WHERE user_id = ? AND group_id = ?;
+                    """, (form.member_id.data, group_id))  # Using challenge_id field to pass user_id
+                    db_con.commit()
+                    flash('Member has been removed from the group.', 'success')
+                else:
+                    flash('Only the group owner can remove members.', 'error')
 
             return redirect(url_for('group', group_id=group_id))
 

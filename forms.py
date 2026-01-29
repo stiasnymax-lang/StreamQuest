@@ -10,8 +10,6 @@ class CreateGroupForm(FlaskForm):
 
 class ProfileForm(FlaskForm):
     account_logout = SubmitField('Log out')  
-
-# class PricingForm(FlaskForm):
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4, max=20)])
     password = PasswordField(validators=[InputRequired(), Length(min=3, max=20)])
@@ -32,15 +30,16 @@ class JoinGroupForm(FlaskForm):
     submit = SubmitField('Join Group')
 
 class GroupForm(FlaskForm):
+    member_id = HiddenField()
     challenge_id = HiddenField()
     start_session = SubmitField('Start Session')
     add_challenge = SubmitField('Add Challenge')
     delete_challenge = SubmitField('Delete Challenge')
     set_active = SubmitField('Set Active')
     completed_challenge = SubmitField('Completed Challenge')
-    leave_group = SubmitField('Leave Group') #fehlt
-    delete_group = SubmitField('Delete Group') #fehlt
-    remove_member = SubmitField('Remove Member') #fehlt
+    leave_group = SubmitField('Leave Group') 
+    delete_group = SubmitField('Delete Group')
+    remove_member = SubmitField('Remove Member') 
     submit = SubmitField('Search') #fehlt
 
 class ChallengeForm(FlaskForm):
