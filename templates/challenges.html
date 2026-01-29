@@ -1,19 +1,21 @@
 {% extends "base.html" %}
 
-{% block TITLE %}Challenges{% endblock %}
+{% block title %}Challenges{% endblock %}
 
 {% block content %}
 <h1>Alle Challenges</h1>
 
 <form method="get">
-    <input type="search" name="c" placeholder="Search challenges" value="{{ c }}">
+    {{ form.c(placeholder="Search challenges") }}
+    {{ form.submit() }}
 </form>
+
 <ul>
     {% for challenge in challenges %}
     <li>
-        <label for="{{ challenge.id }}">
-            <a href="{{ url_for('challenge', challenge_id=challenge.id) }}">{{ challenge.title }} ({{ challenge.game_name }})</a>
-        </label>
+        <a href="{{ url_for('challenge', challenge_id=challenge.id) }}">
+            {{ challenge.title }} ({{ challenge.game_name }})
+        </a>
     </li>
     {% endfor %}
 </ul>

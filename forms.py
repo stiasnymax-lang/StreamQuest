@@ -17,8 +17,8 @@ class RegisterForm(FlaskForm):
     submit = SubmitField('Register')
 
 class ChallengeSearchForm(FlaskForm):
-    submit = SubmitField('Search') #fehlt
-    
+    c = StringField('Search')
+    submit = SubmitField('Search')
 
 class LoginForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4, max=20)])

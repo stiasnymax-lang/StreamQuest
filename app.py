@@ -102,16 +102,20 @@ def overlay(group_id):
 
 # -------- Challenges --------
 
-@app.route('/challenges/')
+@app.route('/challenges/', methods=['GET'])
 def challenges():
     db_con = db.get_db_con()
-    #search functionality
-    c = request.args.get("c", "").strip().lower()
+    form = forms.ChallengeSearchForm(request.args)
+
+    c = (form.c.data or "").strip().lower()
 
     challenges = db_con.execute(
-        "SELECT id, title, difficulty, game_name, time_needed FROM challenges WHERE title LIKE ? ORDER BY title", (f"%{c}%",)
+        "SELECT id, title, difficulty, game_name, time_needed "
+        "FROM challenges WHERE title LIKE ? ORDER BY title",
+        (f"%{c}%",)
     ).fetchall()
-    return render_template('challenges.html', challenges=challenges, c=c)
+
+    return render_template('challenges.html', challenges=challenges, form=form, c=c)
 
 
 
