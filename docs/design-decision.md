@@ -354,24 +354,72 @@ Zusätzlich werden Zeitstempel wie `started_at` und `finished_at` gespeichert.
 ## 10: Nur eine aktive Challenge pro Gruppe (Applikationslogik)
 
 ### Meta
-**Status**  
-: In Arbeit – **Entschieden** – Obsolet
+Status
+: Work in progress - **Decided** - Obsolete
 
-### Problemstellung
+### Problem statement
 Pro Gruppe darf immer nur eine Challenge aktiv sein.
 
-### Entscheidung
+### Decision
+
 Die Einschränkung wird **applikationsseitig** umgesetzt:
 1. Alle aktiven Challenges werden auf `queued` gesetzt  
 2. Die gewählte Challenge wird auf `active` gesetzt
 
-### Begründung
+### Cause
 - Einfacher als DB-Constraints  
 - MVP-freundlich  
 - Verständlich im Code
+*Decision was taken by:* Max Stiasny
 
-### Konsequenzen / Risiken
+### Consequences/Risks
 - ❌ Race-Conditions bei parallelen Requests möglich  
 - ✅ Akzeptabel bei geringer Last
 
+
 ---
+
+## 11: Verzicht auf eine Account-Delete-Funktion
+
+### Meta
+Status
+: Work in progress - **Decided** - Obsolete
+
+### Problem statement
+Es stellte sich die Frage, ob Nutzer ihre Accounts selbstständig löschen können sollen.
+
+Ein Account-Delete hätte zur Folge, dass alle abhängigen Daten (z. B. Gruppen, Gruppenmitgliedschaften, Challenges innerhalb von Gruppen) konsistent entfernt oder angepasst werden müssten. Aufgrund der bestehenden Datenbankstruktur ergeben sich dabei komplexe Abhängigkeiten und Sonderfälle.
+
+### Decision
+Wir verzichten bewusst auf die Implementierung einer Account-Delete-Funktion.
+
+### Cause
+- Das Löschen eines Accounts erfordert das Aufräumen mehrerer abhängiger Entitäten:
+    - Gruppenmitgliedschaften
+    - Gruppen, bei denen der Nutzer Owner ist
+    - Zugehörige Gruppen-Challenges
+- Die korrekte Löschreihenfolge ist fehleranfällig und erhöht die technische Komplexität deutlich
+- Das Feature stellt kein **Kernfeature** der Anwendung dar
+- Für den aktuellen Projektumfang (MVP) überwiegt der Implementierungsaufwand den Mehrwert
+
+Der Verzicht ermöglicht es, den Fokus auf die zentralen Funktionen von StreamQuest zu legen und die Anwendung stabil und übersichtlich zu halten.
+
+Eine Account-Löschung kann zu einem späteren Zeitpunkt erneut evaluiert werden, etwa in Verbindung mit:
+
+- Datenbank-Cascades
+- Soft-Deletes
+- Administrativen Löschfunktionen
+
+*Decision was taken by:* Max Stiasny
+
+### Considered options
+- Account-Delete implementieren
+- Account-Delete weglassen (gewählt)
+- Soft-Delete
+
+| Kriterium | Mit Account-Delete | Ohne Account-Delete |
+| --- | --- | --- |
+| **Technische Komplexität** | ❌ Hoch | ✔️ Niedrig |
+| **Fehleranfälligkeit** | ❌ Hoch | ✔️ Gering |
+| **Relevanz für MVP** | ❌ Gering | ✔️ Hoch |
+| **Entwicklungsaufwand** | ❌ Hoch | ✔️ Niedrig |

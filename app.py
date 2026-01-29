@@ -82,7 +82,11 @@ def overlay(group_id):
             "group_name": group_row['name'],
             "active_challenge": dict(active_challenge) if active_challenge else None,
             "queued_challenges": [dict(ch) for ch in queued_challenges],
-        })
+            "done_count": done_count,
+            "total_count": total_count,
+            "progress_percent": progress_percent,
+})
+    
     else:
         return render_template(
             'overlay.html',
@@ -200,10 +204,10 @@ def register():
 
 # -------- Profile --------
 
-@app.route('/profile/')
+@app.route('/profile/', methods=['GET', 'POST'])
 @login_required
 def profile():
-
+    form = forms.ProfileForm()
     db_con = db.get_db_con()
     user_id = session['user_id']
 
@@ -220,10 +224,13 @@ def profile():
         ORDER BY groups.name
     """, (user_id,)).fetchall()
 
-    if request.method == 'GET':
-        return render_template('profile.html', user=user, user_groups=user_groups)
-    else :  # POST
-        pass  # Für zukünftige Profil-Updates Lukas könnte machen
+    if form.validate_on_submit():
+        if form.account_logout.data:
+            session.clear()
+            flash('You have been logged out.', 'success')
+            return redirect(url_for('index')) 
+    return render_template('profile.html', user=user, user_groups=user_groups, form=form)
+
 
 
 # -------- Groups --------

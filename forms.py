@@ -8,11 +8,19 @@ class CreateGroupForm(FlaskForm):
     user_id = HiddenField()
     submit = SubmitField('Create')
 
+class ProfileForm(FlaskForm):
+    account_logout = SubmitField('Log out')  
+
+# class PricingForm(FlaskForm):
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4, max=20)])
     password = PasswordField(validators=[InputRequired(), Length(min=3, max=20)])
     email = StringField(validators=[InputRequired(), Length(min=6, max=20)])
     submit = SubmitField('Register')
+
+class ChallengeSearchForm(FlaskForm):
+    submit = SubmitField('Search') #fehlt
+    
 
 class LoginForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4, max=20)])
@@ -44,9 +52,3 @@ class ChallengeForm(FlaskForm):
 
 class GroupsSearchForm(FlaskForm):
     submit = SubmitField('Search') #fehlt
-    
-class ProfileForm(FlaskForm):
-    delete = SubmitField('Search') #fehlt
-    abmelden = SubmitField('Search') #fehlt
-
-# class PricingForm(FlaskForm): weglassen?
