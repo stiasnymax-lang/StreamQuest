@@ -46,7 +46,6 @@ Repräsentiert eine StreamQuest-Gruppe, z. B. eine Community oder ein Team, für
 | `name`       | TEXT       | Name der Gruppe                                |
 | `password`   | TEXT       | Password des Users für Login u. Register       |
 | `owner_id`   | INTEGER FK | Verweis auf `user.id` (Ersteller der Gruppe)   |
-| `session_start` | TEXT    | Zeitpunkt wo Session gestartet wird            |
 
 
 ### `group_members`
