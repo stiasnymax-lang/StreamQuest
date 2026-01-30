@@ -24,7 +24,7 @@
             <p>Gerade keine aktive Challenge</p>
             {% else %}
             <h3>{{ active_challenge.title }}</h3>
-            <p>{{ active_challenge.description }}</p>
+            <p>{{ active_challenge.description }} <small>{{ active_challenge.started_at }}</small></p>
             {% endif %}
         </div>
     </section>

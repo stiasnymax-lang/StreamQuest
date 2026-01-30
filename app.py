@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, redirect, session, url_for, request, abort, flash, jsonify
+from flask import Flask, render_template, redirect, session, url_for, request, abort, flash
 import db, forms
 from functions import login_required
 
@@ -31,12 +31,9 @@ def overlay(group_id):
     (user_id, group_id)
     ).fetchone()
     
-    if is_member:
-        is_member = True
-    else: 
-        is_member = False
+    if not is_member:
         return redirect(url_for('join_group', group_id=group_id))
-                        
+    
     group_row = db_con.execute(
         "SELECT id, name FROM groups WHERE id = ?",
         (group_id,)
@@ -45,7 +42,7 @@ def overlay(group_id):
         abort(404) 
 
     active_challenge = db_con.execute("""
-        SELECT c.*, gc.status
+        SELECT c.*, gc.status, gc.started_at
         FROM group_challenges gc
         JOIN challenges c ON c.id = gc.challenge_id
         WHERE gc.group_id = ? AND gc.status = 'active'
@@ -72,33 +69,20 @@ def overlay(group_id):
     done_count = len(done_challenges)
     queued_count = len(queued_challenges)
     active_count = 1 if active_challenge else 0
-
     total_count = done_count + queued_count + active_count
     progress_percent = int(round((done_count / total_count) * 100)) if total_count > 0 else 0
 
-
-    if request.args.get("json") is not None: #Quelle unter https://medium.com/@PyGuyCharles/python-sql-to-json-and-beyond-3e3a36d32853 
-        return jsonify({
-            "group_name": group_row['name'],
-            "active_challenge": dict(active_challenge) if active_challenge else None,
-            "queued_challenges": [dict(ch) for ch in queued_challenges],
-            "done_count": done_count,
-            "total_count": total_count,
-            "progress_percent": progress_percent,
-})
-    
-    else:
-        return render_template(
-            'overlay.html',
-            group_name=group_row['name'],
-            active_challenge=active_challenge,
-            queued_challenges=queued_challenges,
-            done_challenges=done_challenges,
-            group_id=group_id,
-            done_count=done_count,
-            total_count=total_count,
-            progress_percent=progress_percent
-            )
+    return render_template(
+        'overlay.html',
+        group_name=group_row['name'],
+        active_challenge=active_challenge,
+        queued_challenges=queued_challenges,
+        done_challenges=done_challenges,
+        group_id=group_id,
+        done_count=done_count,
+        total_count=total_count,
+        progress_percent=progress_percent
+        )
 
 # -------- Challenges --------
 
@@ -232,7 +216,7 @@ def profile():
         if form.account_logout.data:
             session.clear()
             flash('You have been logged out.', 'success')
-            return redirect(url_for('profile')) 
+            return redirect(url_for('index')) 
     return render_template('profile.html', user=user, user_groups=user_groups, form=form)
 
 
@@ -318,12 +302,8 @@ def group(group_id):
         (user_id, group_id)
     ).fetchone()
     
-    if is_member:
-        is_member = True
-    else: 
-        is_member = False
+    if not is_member:
         return redirect(url_for('join_group', group_id=group_id))
-        
 
     group_row = db_con.execute(
         "SELECT id, owner_id, name FROM groups WHERE id = ?",
@@ -337,11 +317,6 @@ def group(group_id):
         (group_row["owner_id"],)
     ).fetchone()
 
-    group_challenges = db_con.execute(
-        "SELECT * FROM group_challenges WHERE group_id = ?",
-        (group_id,)
-    ).fetchall()
-
     group_members = db_con.execute("""
         SELECT u.id, u.username
         FROM group_members gm
@@ -350,7 +325,7 @@ def group(group_id):
     """, (group_id, group_row["owner_id"])).fetchall()
 
     active_challenge = db_con.execute("""
-        SELECT c.*, gc.status
+        SELECT c.*, gc.status, gc.started_at, gc.finished_at
         FROM group_challenges gc
         JOIN challenges c ON c.id = gc.challenge_id
         WHERE gc.group_id = ? AND gc.status = 'active'
@@ -358,8 +333,11 @@ def group(group_id):
         LIMIT 1
     """, (group_id,)).fetchone()
 
+# www.w3resource.com/sqlite/sqlite-strftime.php für Differenz in Sekunden
+
     done_challenges = db_con.execute("""
-        SELECT c.*, gc.status
+        SELECT c.*, gc.status, gc.started_at, gc.finished_at,
+            (strftime('%s', gc.finished_at) - strftime('%s', gc.started_at)) AS duration_seconds 
         FROM group_challenges gc
         JOIN challenges c ON c.id = gc.challenge_id
         WHERE gc.group_id = ? AND gc.status = 'done'
@@ -374,7 +352,7 @@ def group(group_id):
         ORDER BY gc.assigned_at DESC
     """, (group_id,)).fetchall()
 
-    #search functionality
+
     q = (search_form.q.data or "").strip().lower()
 
     challenges = db_con.execute("""
@@ -413,6 +391,7 @@ def group(group_id):
                 db_con.execute(sql_query, [group_id, action_form.challenge_id.data])
                 db_con.commit()
                 flash('Challenge has been added', 'success')
+
             elif action_form.delete_challenge.data:
                 sql_query = """
                     DELETE FROM group_challenges
@@ -451,15 +430,6 @@ def group(group_id):
                 db_con.commit()
                 flash('Challenge marked as completed.', 'success')
             
-            elif action_form.start_session.data:
-                db_con.execute("""
-                    UPDATE groups
-                    SET session_start = CURRENT_TIMESTAMP
-                    WHERE id = ?;
-                """, (group_id,))
-                db_con.commit()
-                flash('Session has been started', 'success')
-
             elif action_form.leave_group.data:
                 if user_id == group_row['owner_id']:
                     flash('Group owner cannot leave the group.', 'error')
@@ -485,18 +455,25 @@ def group(group_id):
                     flash('Only the group owner can delete the group.', 'error')
 
             elif action_form.remove_member.data:
-                # Nur der Owner kann Mitglieder entfernen
                 if user_id == group_row['owner_id']:
-                    db_con.execute("""
-                        DELETE FROM group_members
-                        WHERE user_id = ? AND group_id = ?;
-                    """, (action_form.member_id.data, group_id))  # Using challenge_id field to pass user_id
-                    db_con.commit()
-                    flash('Member has been removed from the group.', 'success')
+                    member_id = int(action_form.member_id.data)
+
+                    if member_id == group_row['owner_id']:
+                        flash('Owner cannot be removed.', 'error')
+                    else:
+                        db_con.execute(
+                            "DELETE FROM group_members WHERE user_id = ? AND group_id = ?",
+                            (member_id, group_id)
+                        )
+                        db_con.commit()
+                        flash('Member has been removed from the group.', 'success')
                 else:
                     flash('Only the group owner can remove members.', 'error')
 
             return redirect(url_for('group', group_id=group_id))
+        
+        flash('Invalid form submission.', 'error')
+        return redirect(url_for('group', group_id=group_id))
 
 # -------- Create Group ---------
 
@@ -505,9 +482,7 @@ def group(group_id):
 def create_group():
     db_con = db.get_db_con()
     form = forms.CreateGroupForm()
-
     user_id = session['user_id']
-    form.user_id.data = user_id
 
     if request.method == 'GET':
         return render_template('create_group.html', form=form)
