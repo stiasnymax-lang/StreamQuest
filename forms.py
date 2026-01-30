@@ -5,7 +5,6 @@ from wtforms.validators import InputRequired, Length
 class CreateGroupForm(FlaskForm): 
     name = StringField(validators=[InputRequired(), Length(min=2)])  
     password = PasswordField(validators=[InputRequired(), Length(min=3)])
-    user_id = HiddenField()
     submit = SubmitField('Create')
 
 class ProfileForm(FlaskForm):
@@ -32,7 +31,6 @@ class JoinGroupForm(FlaskForm):
 class GroupForm(FlaskForm):
     member_id = HiddenField()
     challenge_id = HiddenField()
-    start_session = SubmitField('Start Session')
     add_challenge = SubmitField('Add Challenge')
     delete_challenge = SubmitField('Delete Challenge')
     set_active = SubmitField('Set Active')

@@ -27,8 +27,8 @@ def overlay(group_id):
     user_id = session['user_id']
     
     is_member = db_con.execute(
-    "SELECT 1 FROM group_members WHERE user_id = ? AND group_id = ?",
-    (user_id, group_id)
+        "SELECT 1 FROM group_members WHERE user_id = ? AND group_id = ?",
+        (user_id, group_id)
     ).fetchone()
     
     if not is_member:
@@ -50,13 +50,11 @@ def overlay(group_id):
         LIMIT 1
     """, (group_id,)).fetchone()
 
-    done_challenges = db_con.execute("""
-        SELECT c.*, gc.status
-        FROM group_challenges gc
-        JOIN challenges c ON c.id = gc.challenge_id
-        WHERE gc.group_id = ? AND gc.status = 'done'
-        ORDER BY gc.assigned_at DESC
-    """, (group_id,)).fetchall()
+    done_count = db_con.execute("""
+        SELECT COUNT(*) AS cnt
+        FROM group_challenges
+        WHERE group_id = ? AND status = 'done'
+    """, (group_id,)).fetchone()["cnt"]
 
     queued_challenges = db_con.execute("""
         SELECT c.*, gc.status
@@ -66,7 +64,6 @@ def overlay(group_id):
         ORDER BY gc.assigned_at DESC
     """, (group_id,)).fetchall()
 
-    done_count = len(done_challenges)
     queued_count = len(queued_challenges)
     active_count = 1 if active_challenge else 0
     total_count = done_count + queued_count + active_count
@@ -77,7 +74,6 @@ def overlay(group_id):
         group_name=group_row['name'],
         active_challenge=active_challenge,
         queued_challenges=queued_challenges,
-        done_challenges=done_challenges,
         group_id=group_id,
         done_count=done_count,
         total_count=total_count,
@@ -380,8 +376,7 @@ def group(group_id):
             group_id=group_id
         )
 
-    else: #request.method == 'POST'
-        
+    if request.method == 'POST':
         if action_form.validate_on_submit():
             if action_form.add_challenge.data:
                 sql_query = """
@@ -509,7 +504,6 @@ def create_group():
     flash('Error creating group. Please check the input fields.', 'error')
     return render_template('create_group.html', form=form)
 
-        
 
 @app.route('/insert/sample/')
 def run_insert_sample():
