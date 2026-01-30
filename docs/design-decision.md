@@ -423,3 +423,56 @@ Eine Account-Löschung kann zu einem späteren Zeitpunkt erneut evaluiert werden
 | **Fehleranfälligkeit** | ❌ Hoch | ✔️ Gering |
 | **Relevanz für MVP** | ❌ Gering | ✔️ Hoch |
 | **Entwicklungsaufwand** | ❌ Hoch | ✔️ Niedrig |
+
+
+---
+
+## 12: Live Timer 
+
+### Meta
+Status
+: Work in progress - **Decided** - Obsolete
+
+### Problem statement
+Ein Live-Timer, der die aktuell laufende Zeit einer Challenge in Echtzeit anzeigt, erfordert eine clientseitige Lösung (z. B. JavaScript mit regelmäßigen Updates oder WebSockets).
+Die bestehende Architektur der Anwendung basiert jedoch primär auf serverseitigem Rendering (Flask + Jinja) ohne kontinuierliche Client-Side-Updates.
+
+### Decision
+Wir verzichten bewusst auf die Implementierung eines Live Timers.
+
+Stattdessen wird die Dauer einer Challenge nachträglich serverseitig berechnet, indem started_at und finished_at in der Datenbank gespeichert und ausgewertet werden.
+
+### Cause
+- Ein Live-Timer ist ohne JavaScript nicht sinnvoll umsetzbar
+- Die Einführung von clientseitigem State, Intervallen oder WebSockets würde:
+    - die technische Komplexität deutlich erhöhen
+    - zusätzliche Fehlerquellen (Desync, Reloads, Edge Cases) schaffen
+- Der Live-Timer stellt kein Kernfeature der Anwendung dar
+- Für den MVP reicht es aus, die Gesamtdauer nach Abschluss einer Challenge anzuzeigen
+- Die serverseitige Lösung ist:
+    - stabil
+    - reproduzierbar
+    - einfach testbar
+
+Der Verzicht erlaubt es, den Fokus auf die Kernfunktionalität von StreamQuest zu legen und die Codebasis schlank zu halten.
+
+Eine Live-Anzeige der Zeit kann zu einem späteren Zeitpunkt erneut evaluiert werden, z. B. mit:
+
+- JavaScript-basierter Timer-Logik
+- Periodischem Polling
+- WebSockets / Server-Sent Events
+
+*Decision was taken by:* Max Stiasny
+
+### Considered options
+- Live-Timer mit JavaScript implementieren
+- Live-Timer weglassen (gewählt)
+- Hybrid-Ansatz (serverseitige Zeit + clientseitige Anzeige)
+
+| Kriterium | Mit Live-Timer | Ohne Live-Timer |
+| --- | --- | --- |
+| **Technische Komplexität** | ❌ Hoch | ✔️ Niedrig |
+| **Zusätzliche Abhängigkeiten** | ❌ JavaScript nötig | ✔️ Keine |
+| **Fehleranfälligkeit** | ❌ Mittel bis hoch | ✔️ Gering |
+| **Relevanz für MVP** | ❌ Hoch | ✔️ Hoch |
+| **Wartbarkeit** | ❌ Aufwenidger | ✔️ Einfach |
