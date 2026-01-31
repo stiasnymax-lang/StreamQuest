@@ -40,4 +40,4 @@ Wie kann man in SQL Zeit brechnen und übergeben?
 
 Link
 :
-www.w3resource.com/sqlite/sqlite-strftime.php
+www.w3resource.com/sqlite/sqlite-strftime.php 
