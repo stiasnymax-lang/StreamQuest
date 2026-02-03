@@ -26,7 +26,7 @@ Offene Punkte, Entscheidungen & technische To-dos
 
 ###  Timer & Challenges
 - Timer einbauen  
-    - States: `start`, `stop`, `end (auto)`
+  - States: `start`, `stop`, `end (auto)`
 - Challenge Time Needed definieren
 
 ### Design & UX
@@ -46,7 +46,7 @@ Offene Punkte, Entscheidungen & technische To-dos
 
 ### Gruppen & Rechte
 - `leave`, `delete` und `remove_member` für Groups implementieren
-- `check_up` für `is_groupmember` --> **bereits implementiert**
+- `check_up` für `is_groupmember` 
 
 ### Dokumentation & Planung
 - Alle oben genannten Punkte in die Dokumentation einpflegen
