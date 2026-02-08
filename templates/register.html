@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block title %}Register | StreamQuest{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+{% endblock %}
 
 {% block content %}
     <h2>Registrierung</h2>

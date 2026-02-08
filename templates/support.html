@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block title %}Support | StreamQuest{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/support.css') }}">
+{% endblock %}
 
 {% block content %}
     <h2>Support</h2>
